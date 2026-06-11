@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="BM2026-analysis" xmlns="http://www.topografix.com/GPX/1/1">
+  <wpt lat="62.4094" lon="10.9977">
+    <name>START/FINISH Tolga</name>
+    <desc>Small village. Coop/Joker store. Start &amp; finish.</desc>
+    <sym>Flag, Green</sym>
+  </wpt>
+  <wpt lat="62.3668" lon="10.6549">
+    <name>Tynset (30km) RESUPPLY</name>
+    <desc>Regional town: Rema/Coop/Kiwi, Circle K 24h fuel, Intersport bike service, pharmacy, hospital. Best early resupply.</desc>
+    <sym>Shopping Center</sym>
+  </wpt>
+  <wpt lat="62.5325" lon="10.3688">
+    <name>Kvikne (70km)</name>
+    <desc>Tiny: Joker shop + fuel pump. Long gap after.</desc>
+    <sym>Convenience Store</sym>
+  </wpt>
+  <wpt lat="62.6483" lon="10.0418">
+    <name>Berkaak/Rennebu (100km)</name>
+    <desc>On E6: Coop, Circle K/Shell 24h fuel, hot food.</desc>
+    <sym>Convenience Store</sym>
+  </wpt>
+  <wpt lat="62.6182" lon="9.749">
+    <name>Oppdal (130km) RESUPPLY</name>
+    <desc>Town: Coop Extra/Mega, Rema, Kiwi; multiple 24h fuel; sport shops w/ bike service. Major resupply + last big town before Sunndalen.</desc>
+    <sym>Shopping Center</sym>
+  </wpt>
+  <wpt lat="62.549" lon="9.1096">
+    <name>Gjora (170km)</name>
+    <desc>Small Joker shop. Start of long fjord descent.</desc>
+    <sym>Convenience Store</sym>
+  </wpt>
+  <wpt lat="62.6346" lon="8.5339">
+    <name>Sunndalsora (210km) RESUPPLY</name>
+    <desc>Sea-level fjord town: Coop Extra/Rema/Kiwi/Bunnpris, Circle K 24h, sport shop. WARM. Good resupply; possible early bivy.</desc>
+    <sym>Shopping Center</sym>
+  </wpt>
+  <wpt lat="62.6496" lon="8.1153">
+    <name>Eresfjord (300km)</name>
+    <desc>Joker shop + fuel. Remote stretch.</desc>
+    <sym>Convenience Store</sym>
+  </wpt>
+  <wpt lat="62.5587" lon="7.6829">
+    <name>ANDALSNES (380km) RESUPPLY</name>
+    <desc>Sea-level town: Coop/Rema/Kiwi, 24h fuel, sport shops (outdoor hub), train. Major resupply. ~1/3 mark - possible bivy if ahead.</desc>
+    <sym>Shopping Center</sym>
+  </wpt>
+  <wpt lat="62.3085" lon="6.9988">
+    <name>Stranda (450km) RESUPPLY</name>
+    <desc>Town: Coop Extra/Rema/Kiwi, 24h fuel, sport shop, ferry.</desc>
+    <sym>Shopping Center</sym>
+  </wpt>
+  <wpt lat="61.9997" lon="7.0407">
+    <name>Hellesylt area (500km)</name>
+    <desc>Village: Spar/Joker, fuel, ferry. Before Stryn.</desc>
+    <sym>Convenience Store</sym>
+  </wpt>
+  <wpt lat="61.9519" lon="6.99">
+    <name>STRYN (510km) RESUPPLY</name>
+    <desc>Low fjord town: Coop/Rema/Kiwi/Bunnpris, 24h fuel, sport+bike service. LAST big town before the HIGH mountains. Fuel + eat big here.</desc>
+    <sym>Shopping Center</sym>
+  </wpt>
+  <wpt lat="61.9865" lon="7.4905">
+    <name>!! GROTLI PASS 1137m (562km)</name>
+    <desc>High exposed pass. Grotli hotel/fuel (seasonal). Cold/windy. NOT a bivy spot - full kit on.</desc>
+    <sym>Skull and Crossbones</sym>
+  </wpt>
+  <wpt lat="61.8852" lon="8.2642">
+    <name>Bismo/Skjak (620km)</name>
+    <desc>Coop Marked/Joker, fuel. Small.</desc>
+    <sym>Convenience Store</sym>
+  </wpt>
+  <wpt lat="61.8285" lon="8.5371">
+    <name>LOM (640km) RESUPPLY</name>
+    <desc>Outdoor hub, 392m: Coop, Joker, FAMOUS bakery, fuel, bike service. LAST town before Sognefjellet. Strong sleep-or-fuel point.</desc>
+    <sym>Shopping Center</sym>
+  </wpt>
+  <wpt lat="61.5661" lon="8.0079">
+    <name>!! SOGNEFJELLET 1421m (692km)</name>
+    <desc>ROUTE HIGH POINT - Europe's highest pass road. Snow walls in July, near-freezing, very exposed, ~40km no services. Cross rested &amp; fully dressed. DO NOT bivy here.</desc>
+    <sym>Skull and Crossbones</sym>
+  </wpt>
+  <wpt lat="61.3112" lon="7.787">
+    <name>** Ovre Ardal (740km) PRIMARY SLEEP</name>
+    <desc>Sea-level fjord town, 12m, WARMEST/most sheltered spot mid-race. Coop/Rema/Spar, 24h fuel, sport shop. After Sognefjellet, before Valdresflye. RECOMMENDED bivy.</desc>
+    <sym>Lodging</sym>
+  </wpt>
+  <wpt lat="61.1681" lon="8.4475">
+    <name>Vang i Valdres (800km)</name>
+    <desc>Coop/Joker/Spar, fuel, 470m. Valdres valley.</desc>
+    <sym>Convenience Store</sym>
+  </wpt>
+  <wpt lat="61.2485" lon="8.9058">
+    <name>Beitostolen (840km) RESUPPLY</name>
+    <desc>Resort, 893m: Coop/Spar, fuel, bike rental+service. Resupply but high/cool. Last services before Valdresflye.</desc>
+    <sym>Shopping Center</sym>
+  </wpt>
+  <wpt lat="61.3887" lon="8.8106">
+    <name>!! VALDRESFLYE 1390m (860km)</name>
+    <desc>Exposed high plateau, ~2nd highest point. Cold/windy, no services. Full kit. DO NOT bivy.</desc>
+    <sym>Skull and Crossbones</sym>
+  </wpt>
+  <wpt lat="61.5457" lon="8.9075">
+    <name>Gjendesheim/Maurvangen (880km)</name>
+    <desc>DNT lodge + camping + cafe (seasonal). Jotunheimen. Water/food.</desc>
+    <sym>Convenience Store</sym>
+  </wpt>
+  <wpt lat="61.8743" lon="9.1632">
+    <name>Vagamo (930km) RESUPPLY</name>
+    <desc>Town, 366m: Coop Extra/Joker/Spar, fuel, sport shop. Resupply.</desc>
+    <sym>Shopping Center</sym>
+  </wpt>
+  <wpt lat="61.8459" lon="9.3334">
+    <name>Otta/Sel (940km) RESUPPLY</name>
+    <desc>Regional hub: Coop/Rema/Kiwi, 24h E6 fuel, Intersport bike, train. Good resupply.</desc>
+    <sym>Shopping Center</sym>
+  </wpt>
+  <wpt lat="62.0267" lon="9.4152">
+    <name>!! Dovre/Grimsdalen 1170m (989km)</name>
+    <desc>High Dovrefjell road, exposed, remote. Cold. Full kit.</desc>
+    <sym>Skull and Crossbones</sym>
+  </wpt>
+  <wpt lat="62.0782" lon="10.0672">
+    <name>Folldal (1030km) RESUPPLY</name>
+    <desc>One of Norway's highest villages, 785m: Coop/Joker, fuel. Resupply on final highland stretch.</desc>
+    <sym>Shopping Center</sym>
+  </wpt>
+  <wpt lat="62.2145" lon="10.5745">
+    <name>Alvdal (1080km) RESUPPLY</name>
+    <desc>Village: Coop Extra/Prix, Kiwi, fuel. Last resupply before finish.</desc>
+    <sym>Shopping Center</sym>
+  </wpt>
+</gpx>
