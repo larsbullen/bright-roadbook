@@ -402,7 +402,7 @@ Sognefjellet (km 692, 1421 m · ~40 km no services) · Valdresflye (km 860, 1390
 </ul>
 Note: most regular supermarkets close <b>all day Sunday</b> and at <b>22:00–23:00</b> otherwise — the shops above are the exceptions.</div>
 
-<button class="preset" id="shopListBtn" data-label="🔎 Show full shop, fuel &amp; food list (151 places)" onclick="toggleShopList()" style="font-size:14px;padding:11px 18px;margin-top:6px">🔎 Show full shop, fuel &amp; food list (151 places)</button>
+<p style="font-weight:700;margin:16px 0 6px;font-size:15px">🔎 Full shop, fuel &amp; food list — 151 places</p>
 <div id="shopListPanel" style="margin-top:14px">
 <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:10px">
 <button class="preset shopfilter active" data-cat="all" onclick="filterShops('all',this)">All</button>
@@ -483,15 +483,6 @@ function updateFerry(arr){
     `Next sailing <b>${fmtClock(depDate)}</b> — wait <b style="color:${big?'#ff9b9b':'#9fe6b0'}">${waitTxt}</b> — `+
     `arrive Stranda ≈ <b>${fmtClock(landDate)}</b>.`+
     (big?`<br><span style="color:#ff9b9b">🌙 That's the overnight gap — you'd queue ~${waitTxt} at the quay. A good place to take your nap, or push to beat the 23:15 boat.</span>`:'');
-}
-function toggleShopList(){
-  const p=document.getElementById('shopListPanel'), b=document.getElementById('shopListBtn');
-  if(p.style.display==='none'||!p.style.display){p.style.display='block';
-    b.textContent='🔼 Hide full shop & fuel list';
-    document.querySelectorAll('.shopfilter').forEach(x=>x.classList.remove('active'));
-    document.querySelector('.shopfilter[data-cat="all"]').classList.add('active');
-    renderShopList('all');}
-  else{p.style.display='none'; b.textContent=b.dataset.label;}
 }
 const fmtKm=k=>k.toFixed(0);
 // ---------- MAP ----------
@@ -665,8 +656,7 @@ document.getElementById('target').addEventListener('input',function(){syncSlider
 document.getElementById('start').addEventListener('input',recompute);
 document.getElementById('sleep').addEventListener('input',recompute);
 recompute();
-renderShopList('all'); // shop/fuel/food list shown expanded by default
-document.getElementById('shopListBtn').textContent='🔼 Hide full shop, fuel & food list';
+renderShopList('all'); // shop/fuel/food list always shown
 </script>
 </div>
 </body></html>
