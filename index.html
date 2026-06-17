@@ -23,6 +23,7 @@ h2{font-size:21px;margin:38px 0 14px;padding-bottom:8px;border-bottom:1px solid 
 #map{height:460px;border-radius:14px;border:1px solid var(--line);margin-top:6px}
 .legend{display:flex;flex-wrap:wrap;gap:14px;margin:12px 2px;color:var(--mut);font-size:13px}
 .dot{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:6px;vertical-align:middle}
+.flagicon{font-size:22px;line-height:22px;text-align:center;background:none;border:none;filter:drop-shadow(0 1px 2px rgba(0,0,0,.7))}
 .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 20px}
 .callout{background:linear-gradient(135deg,#1c2b22,#1a2230);border:1px solid #2f5a44;border-left:4px solid var(--green);border-radius:12px;padding:16px 20px;margin:8px 0}
 .warnbox{background:linear-gradient(135deg,#2b1c20,#1a2230);border:1px solid #5a2f37;border-left:4px solid var(--red);border-radius:12px;padding:16px 20px;margin:14px 0}
@@ -83,7 +84,7 @@ path.hovermk{filter:drop-shadow(0 0 5px rgba(255,106,0,.9))}
 <h2>🗺️ Route map</h2>
 <div id="map"></div>
 <div class="legend">
- <span><i class="dot" style="background:#34c47a"></i>Start/Finish</span>
+ <span>🏁 Start/Finish</span>
  <span><i class="dot" style="background:#3b9df0"></i>Major resupply</span>
  <span><i class="dot" style="background:#7b8a9c"></i>Small shop</span>
  <span><i class="dot" style="background:#b07bff"></i>💤 Sleep stop (this plan)</span>
@@ -523,6 +524,13 @@ map.fitBounds(L.polyline(line).getBounds(),{padding:[20,20]});
 const colors={start:'#34c47a',resupply:'#3b9df0',store:'#7b8a9c',sleep:'#b07bff',warning:'#ff5c6c'};
 const wptMarkers=[];
 DATA.wpts.forEach(w=>{
+  if(w.type==='start'){ // checkered-flag marker for start/finish
+    const fm=L.marker([w.lat,w.lon],{icon:L.divIcon({className:'flagicon',html:'🏁',iconSize:[26,26],iconAnchor:[5,24]}),zIndexOffset:1000}).addTo(map);
+    fm.bindPopup(`<b>${w.name}</b><br><b>${fmtKm(w.km)} km</b> · +${w.cumGain} m climbed<br>${w.desc}`);
+    fm.bindTooltip(`${fmtKm(w.km)}km ${w.name}`,{direction:'top'});
+    wptMarkers.push({w,m:fm,flag:true});
+    return;
+  }
   const isStar=w.type==='sleep';
   const m=L.circleMarker([w.lat,w.lon],{radius:isStar?9:7,color:'#0f1419',weight:2,
     fillColor:colors[w.type]||'#888',fillOpacity:1}).addTo(map);
@@ -531,7 +539,8 @@ DATA.wpts.forEach(w=>{
   wptMarkers.push({w,m});
 });
 function syncMapSleep(chosen){
-  wptMarkers.forEach(({w,m})=>{
+  wptMarkers.forEach(({w,m,flag})=>{
+    if(flag) return; // checkered-flag start/finish marker — nothing to restyle
     const nap=chosen&&chosen.has(w);
     m.setStyle({fillColor:nap?'#b07bff':(colors[w.type]||'#888')});
     m.setRadius(nap?9:(w.type==='sleep'?9:7));
