@@ -434,7 +434,7 @@ Sognefjellet (km 692, 1421 m · ~40 km no services) · Valdresflye (km 860, 1390
 Note: most regular supermarkets close <b>all day Sunday</b> and at <b>22:00–23:00</b> otherwise — the shops above are the exceptions.</div>
 
 <button class="preset" id="shopListBtn" data-label="🔎 Show full shop, fuel &amp; food list (151 places)" onclick="toggleShopList()" style="font-size:14px;padding:11px 18px;margin-top:6px">🔎 Show full shop, fuel &amp; food list (151 places)</button>
-<div id="shopListPanel" style="display:none;margin-top:14px">
+<div id="shopListPanel" style="margin-top:14px">
 <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:10px">
 <button class="preset shopfilter active" data-cat="all" onclick="filterShops('all',this)">All</button>
 <button class="preset shopfilter" data-cat="g" onclick="filterShops('g',this)">🛒 Groceries</button>
@@ -695,6 +695,8 @@ document.getElementById('target').addEventListener('input',function(){syncSlider
 document.getElementById('start').addEventListener('input',recompute);
 document.getElementById('sleep').addEventListener('input',recompute);
 recompute();
+renderShopList('all'); // shop/fuel/food list shown expanded by default
+document.getElementById('shopListBtn').textContent='🔼 Hide full shop, fuel & food list';
 </script>
 </div>
 </body></html>
