@@ -356,6 +356,23 @@ Sognefjellet (km 692, 1421 m · ~40 km no services) · Valdresflye (km 860, 1390
 </table>
 </div>
 
+<button class="preset" id="ferryBtn" onclick="toggleFerry()" style="font-size:14px;padding:11px 18px;margin-top:10px">⛴️ Liabygda → Stranda ferry — timetable &amp; your crossing</button>
+<div id="ferryPanel" style="display:none;margin-top:12px">
+<div class="callout"><b>⛴️ Storfjorden crossing · Liabygda → Stranda</b> (≈ km 449 · Fjord1 <i>MF&nbsp;Volda</i> · fv650 · ~13 min · <b>free for cyclists</b>). There is <b>no bridge</b> — the drawn GPX line snaps over land, but the route crosses here by boat.
+ <div id="ferryEta" style="margin-top:10px"></div>
+</div>
+<div class="warnbox"><b>🌙 Overnight gap — plan around it.</b> Last boat from Liabygda is <b>23:15</b> (Sat 23:45). First next morning: <b>06:15 Mon–Fri · 07:15 Sat · 08:30 Sun</b>. Arrive after the last sailing and you wait <b>~7 h</b> at the quay — either time your approach, or bank a nap here.</div>
+<div class="tablewrap"><table>
+<thead><tr><th>Departures from Liabygda</th><th>Sailing times</th></tr></thead>
+<tbody>
+<tr><td><b>Mon–Fri</b></td><td>06:15, 06:45, 07:15, 08:00, 08:30, 09:00, 09:30, 10:00, 10:30, 11:00, 11:30, 12:00, 12:30, 13:00, 13:30, 14:00, 14:30, 15:00, 15:30, 16:00, 16:30, 17:00, 17:30, 18:00, 18:30, 19:00, 19:45, 20:45, 21:45, 22:45, <b>23:15</b></td></tr>
+<tr><td><b>Saturday</b></td><td>07:15, 08:00, 08:30, 09:00, 09:30, 10:00, 10:30, 11:00, 11:30, 12:00, 12:30, 13:00, 13:30, 14:00, 14:30, 15:00, 15:30, 16:30, 17:00, 17:30, 18:00, 19:00, 19:45, 20:45, 21:45, 22:45, 23:15, <b>23:45</b></td></tr>
+<tr><td><b>Sunday</b></td><td>08:30, 09:00, 09:30, 10:00, 10:30, 11:00, 11:30, 12:00, 12:30, 13:00, 13:30, 14:00, 14:30, 15:00, 15:30, 16:00, 16:30, 17:00, 17:30, 18:00, 18:30, 19:00, 19:45, 20:45, 21:45, 22:45, <b>23:15</b></td></tr>
+</tbody>
+</table></div>
+<p class="note">Times from Fjord1 / fergeruter.info (2026 schedule) — <b>re-check before the start</b>, summer extras &amp; holidays vary. The reverse leg (Stranda→Liabygda) runs on a near-mirror hourly/half-hourly pattern 06:00–23:00.</p>
+</div>
+
 <h2>🛒 Resupply — verified shops &amp; gaps (OpenStreetMap)</h2>
 <p class="note">Every shop &amp; fuel station within 3.5 km of the GPX, pulled from OpenStreetMap and matched to route-km. Hours change — re-check before July — but this is the real on-the-ground picture.</p>
 <div class="warnbox"><b>⚠️ Three "towns" the route does NOT enter</b> (marker is on the line, but the supermarkets are a detour): <b>Stryn</b> ~9 km W (use Joker Hjelledalen instead) · <b>Folldal</b> ~6.5 km N · <b>Dombås</b> ~10 km W. Don't bank on their shops.</div>
@@ -433,6 +450,38 @@ function renderShopList(cat){
 function filterShops(cat,el){
   document.querySelectorAll('.shopfilter').forEach(x=>x.classList.remove('active'));
   el.classList.add('active'); renderShopList(cat);
+}
+function toggleFerry(){
+  const p=document.getElementById('ferryPanel');
+  p.style.display=(p.style.display==='none'||!p.style.display)?'block':'none';
+}
+// Liabygda → Stranda departures (minutes after midnight), by day type. 2026 Fjord1 schedule.
+const FERRY_DEP={
+  wd:[375,405,435,480,510,540,570,600,630,660,690,720,750,780,810,840,870,900,930,960,990,1020,1050,1080,1110,1140,1185,1245,1305,1365,1395],
+  sat:[435,480,510,540,570,600,630,660,690,720,750,780,810,840,870,900,930,990,1020,1050,1080,1140,1185,1245,1305,1365,1395,1425],
+  sun:[510,540,570,600,630,660,690,720,750,780,810,840,870,900,930,960,990,1020,1050,1080,1110,1140,1185,1245,1305,1365,1395]
+};
+const ferryDay=dow=>dow===0?FERRY_DEP.sun:(dow===6?FERRY_DEP.sat:FERRY_DEP.wd);
+function updateFerry(arr){
+  const box=document.getElementById('ferryEta'); if(!box)return;
+  if(!arr){box.textContent='';return;}
+  const arrMin=arr.getHours()*60+arr.getMinutes()+arr.getSeconds()/60; // fractional → a just-missed boat rolls forward
+  let dep=ferryDay(arr.getDay()).find(t=>t>=arrMin), dayOffset=0;
+  if(dep===undefined){ // missed last boat today → first sailing next morning
+    dayOffset=1; dep=ferryDay((arr.getDay()+1)%7)[0];
+  }
+  const midnight=new Date(arr); midnight.setHours(0,0,0,0);
+  const depDate=new Date(midnight.getTime()+(dayOffset*1440+dep)*60000);
+  const landDate=new Date(depDate.getTime()+13*60000);
+  const wait=Math.max(0,Math.round((depDate-arr)/60000));
+  const wh=Math.floor(wait/60), wm=wait%60;
+  const waitTxt=wh?`${wh} h ${String(wm).padStart(2,'0')}`:`${wm} min`;
+  const big=wait>=90; // long wait → likely the overnight gap
+  box.innerHTML=
+    `At this pace you reach <b>Liabygda</b> ≈ <b>${fmtClock(arr)}</b>. `+
+    `Next sailing <b>${fmtClock(depDate)}</b> — wait <b style="color:${big?'#ff9b9b':'#9fe6b0'}">${waitTxt}</b> — `+
+    `arrive Stranda ≈ <b>${fmtClock(landDate)}</b>.`+
+    (big?`<br><span style="color:#ff9b9b">🌙 That's the overnight gap — you'd queue ~${waitTxt} at the quay. A good place to take your nap, or push to beat the 23:15 boat.</span>`:'');
 }
 function toggleShopList(){
   const p=document.getElementById('shopListPanel'), b=document.getElementById('shopListBtn');
@@ -574,10 +623,11 @@ function recompute(){
   document.getElementById('movinfo').innerHTML=
     `Moving ${fmtDur(movingH)} · <b style="color:#cda8ff">${nNaps} nap${nNaps!=1?'s':''} × ${napLen}h = ${fmtDur(totalSleep)} sleep</b> (~${per24.toFixed(1)} h per 24h) · resupply ${fmtDur(baseStops)} · avg moving ${(DATA.totalKm/movingH).toFixed(1)} km/h`;
   let tb=document.getElementById('pacebody');tb.innerHTML='';
-  let cumStop=0;
+  let cumStop=0, ferryArr=null;
   DATA.wpts.forEach(w=>{
     const elapsed=movingH*(w.km+w.cumGain*C)/totalEffort+cumStop;
     const eta=new Date(start.getTime()+elapsed*3600*1000);
+    if(w.name==='Stranda')ferryArr=eta;
     const hr=eta.getHours(), dow=eta.getDay(); const nap=chosen.has(w);
     let openTxt;
     if(w.type==='warning'){openTxt='<span class="closed">— exposed pass —</span>';}
@@ -595,6 +645,7 @@ function recompute(){
     tb.appendChild(tr);
     cumStop+=(stopMin[w.type]||0)/60+(nap?napLen:0);
   });
+  updateFerry(ferryArr);
   const eta=new Date(start.getTime()+target*3600*1000);
   document.getElementById('finishinfo').textContent=`Projected finish: ${fmtClock(eta)} (${fmtDur(target)} elapsed)`;
   document.getElementById('bigtarget').textContent=(target%1)?target.toFixed(1):target;
