@@ -448,6 +448,31 @@ Note: most regular supermarkets close <b>all day Sunday</b> and at <b>22:00–23
 <tbody id="shopListBody"></tbody></table></div>
 </div>
 
+<button class="preset" id="foodBtn" onclick="toggleFood()" style="font-size:14px;padding:11px 18px;margin-top:14px">🍔 Hot food — fast food within 2 km of the route</button>
+<div id="foodPanel" style="display:none;margin-top:14px">
+<div class="callout"><b>🍔 Hot food on/near the route</b> (≤ 2 km off the line — OpenStreetMap + local knowledge). Unlike groceries, Norwegian <b>fast-food, pizza &amp; kebab places generally open on Sundays</b> and run into the evening — so these are your hot-meal lifeline on day-1 Sunday and after the supermarkets shut. <b>The only fast-food chain anywhere on route is Burger King in Oppdal</b> — no McDonald's, no Subway. Everything else is a local grill/pizzeria.</div>
+<div class="tablewrap"><table>
+<thead><tr><th>km</th><th>Town</th><th>Place</th><th>Food</th><th>Open (OSM)</th><th>Off route</th></tr></thead>
+<tbody>
+<tr><td><b>134</b></td><td>Oppdal</td><td><b>🍔 Burger King</b></td><td>burgers</td><td><span class="mut">—</span></td><td>130 m</td></tr>
+<tr><td>134</td><td>Oppdal</td><td>Torino Oppdal</td><td>pizza / grill</td><td><span class="mut">—</span></td><td>100 m</td></tr>
+<tr><td>134</td><td>Oppdal</td><td>Pizzabakeren</td><td>pizza</td><td>Su–Th 13–22 · Fr/Sa 13–23</td><td>135 m</td></tr>
+<tr><td>134</td><td>Oppdal</td><td>Tip-Top Kebab</td><td>kebab</td><td><span class="mut">—</span></td><td>140 m</td></tr>
+<tr><td><b>198</b></td><td>Sunndal</td><td>Timian på farten</td><td>grill / italian</td><td><span class="mut">—</span></td><td>255 m</td></tr>
+<tr><td><b>204</b></td><td>Sunndalsøra</td><td>Express Pizzaburger</td><td>burgers · pizza</td><td><span class="mut">—</span></td><td>75 m</td></tr>
+<tr><td><b>379</b></td><td>Åndalsnes</td><td>Mama Rosa</td><td>burger · kebab · pizza</td><td>Mo–Th,Su 14–21 · Fr/Sa 14–22</td><td>95 m</td></tr>
+<tr><td><b>434</b></td><td>Valldal / Sylte</td><td>Kulå Bowling</td><td>grill / fast food</td><td><span class="mut">—</span></td><td>55 m</td></tr>
+<tr><td><b>453</b></td><td>Stranda</td><td>Siena Pizzaria</td><td>pizza</td><td><span class="mut">—</span></td><td>25 m</td></tr>
+<tr><td><b>638</b></td><td>Lom</td><td>Milano</td><td>pizza</td><td><span class="mut">—</span></td><td>465 m</td></tr>
+<tr><td><b>741</b></td><td>Øvre Årdal</td><td>Mama Mia</td><td>kebab</td><td>Mo–Su 13–22</td><td>65 m</td></tr>
+<tr><td><b>840</b></td><td>Beitostølen</td><td>Peppes Pizza</td><td>pizza</td><td>Mo–Th,Su 12–22:30 · Fr/Sa 12–23</td><td>160 m</td></tr>
+<tr><td>840</td><td>Beitostølen</td><td>Pizzabakeren</td><td>pizza</td><td><span class="mut">—</span></td><td>~1.1 km</td></tr>
+<tr><td><b>1065</b></td><td>Alvdal</td><td>Jafs</td><td>burgers · hot dogs</td><td><span class="mut">—</span></td><td>25 m</td></tr>
+<tr><td><b>1112</b></td><td>Tynset</td><td>Ruth's Diner</td><td>american / diner</td><td><span class="mut">—</span></td><td>~1.3 km</td></tr>
+</tbody></table></div>
+<p class="note"><b>Off route</b> = straight-line one-way; roughly double it for the round-trip detour (all but the last two are essentially on the line). Hours from OpenStreetMap are often missing/outdated — <b>re-check before the start</b>. Note km 134 (Oppdal) stacks 4 options incl. Burger King, making it the best hot-food stop of day-1 Sunday before the long Aursjøvegen gap.</p>
+</div>
+
 <h2>💧 Water &amp; 🔧 repairs — quick reference</h2>
 <div class="card">
 <b>Water = basically a non-issue.</b> Tap water is excellent & free everywhere; mountain streams above the farmland line are safe untreated and you'll cross hundreds. Refill at fuel stations, churches/cemeteries (outdoor taps), rasteplasser and DNT lodges. Carry ~1.5–2 L and top up often; a small filter is backup insurance for lowland/farm sections.<br><br>
@@ -484,6 +509,10 @@ function filterShops(cat,el){
 }
 function toggleFerry(){
   const p=document.getElementById('ferryPanel');
+  p.style.display=(p.style.display==='none'||!p.style.display)?'block':'none';
+}
+function toggleFood(){
+  const p=document.getElementById('foodPanel');
   p.style.display=(p.style.display==='none'||!p.style.display)?'block':'none';
 }
 // Liabygda → Stranda departures (minutes after midnight), by day type. 2026 Fjord1 schedule.
