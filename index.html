@@ -26,6 +26,11 @@ h2{font-size:21px;margin:38px 0 14px;padding-bottom:8px;border-bottom:1px solid 
 .flagicon{font-size:22px;line-height:22px;text-align:center;background:none;border:none;filter:drop-shadow(0 1px 2px rgba(0,0,0,.7))}
 .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 20px}
 .callout{background:linear-gradient(135deg,#1c2b22,#1a2230);border:1px solid #2f5a44;border-left:4px solid var(--green);border-radius:12px;padding:16px 20px;margin:8px 0}
+details.callout summary{cursor:pointer;list-style:none}
+details.callout summary::-webkit-details-marker{display:none}
+details.callout summary::after{content:' ▾';color:var(--mut)}
+details.callout[open] summary::after{content:' ▴'}
+details.callout[open] summary{margin-bottom:10px}
 .warnbox{background:linear-gradient(135deg,#2b1c20,#1a2230);border:1px solid #5a2f37;border-left:4px solid var(--red);border-radius:12px;padding:16px 20px;margin:14px 0}
 table{width:100%;border-collapse:collapse;font-size:14px}
 th,td{padding:9px 10px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
@@ -103,15 +108,15 @@ path.hovermk{filter:drop-shadow(0 0 5px rgba(255,106,0,.9))}
 <div class="card" style="height:340px"><canvas id="profile"></canvas></div>
 <p class="note"><b>Hover the curve</b> for elevation — and a live orange marker shows exactly where you are on the map above (it pans to follow you). Coloured dots = resupply (blue), recommended sleep (purple), cold high passes (red). Two distinct halves: rolling highlands & fjords to ~km 510, then the big mountains (Strynefjellet, Sognefjellet, Valdresflye) through Jotunheimen.</p>
 
-<div class="callout">
-<b>🛏️ Sleep strategy — sleep LOW, sleep SHELTERED.</b><br>
+<details class="callout">
+<summary><b>🛏️ Sleep strategy — sleep LOW, sleep SHELTERED.</b></summary>
 Even under the midnight sun the high passes sit near freezing at "night" with wind & snow patches — a sleeping-bag bivy up there is a real hypothermia risk. The route drops to warm valley bottoms at the right spots.<br><br>
 <b>★ Primary: Øvre Årdal — km 740, 12 m (sea level).</b> The best bivy on course: warmest air, sheltered fjord town, 24h services, and it sits <b>right after Sognefjellet</b> (hardest climb done) and <b>before Valdresflye</b> (fresh legs for it). At a fast pace you'd arrive ~18–22h in — ideal for a 2–4h sleep.<br>
 <b>Sleeping ~2 h per 24 h?</b> You'll need a <i>chain</i> of low, sheltered spots. Use these in order as your fatigue window lands — the pacing planner below auto-places a nap at the best one near each rest mark:<br>
 <b>① Sunndalsøra</b> (km 210, sea level) · <b>② Åndalsnes</b> (km 380, sea level) · <b>③ Strynedalen</b> (km 510, low valley — Stryn town is a 9 km W detour) · <b>④ Lom</b> (km 640, 392 m — before Sognefjellet) · <b>★⑤ Øvre Årdal</b> (km 740, 12 m — the prime spot) · <b>⑥ Vågåmo / Otta</b> (km 930–940, ~370 m) · <b>⑦ Alvdal</b> (km 1080, 596 m — last chance).<br>
 Golden rule still holds: always take your nap at the <i>low valley town before</i> a big cold pass, never after starting the climb.<br><br>
 <b>Bivy micro-tips:</b> sleep slightly <i>up-slope</i> (cold air & frost pool on the valley floor); use gapahuk lean-tos, rasteplass pull-offs, bus shelters or barn lees; get out of wind & under tree cover; reflective bivy bag over the sleeping bag. Right-to-roam (allemannsretten) applies on uncultivated land &gt;150 m from houses.
-</div>
+</details>
 
 <div class="warnbox">
 <b>⚠️ Cold high-pass danger zones — full kit, do NOT bivy:</b>
