@@ -85,6 +85,26 @@ path.hovermk{filter:drop-shadow(0 0 5px rgba(255,106,0,.9))}
  <div class="chip"><b>23</b><span>significant climbs</span></div>
 </div>
 
+<h2>⏱️ Pacing plan</h2>
+<div class="card">
+ <div class="timehero">
+  <div><span class="bignum" id="bigtarget">72</span><span class="bigunit">hours target</span></div>
+  <div class="bigfinish" id="bigfinish"></div>
+ </div>
+ <input type="range" id="targetSlider" min="20" max="100" step="1" value="72" class="slider">
+ <div class="sliderlabels"><span>20h</span><span>40h</span><span>60h</span><span>80h</span><span>100h</span></div>
+ <div class="controls" style="margin-top:18px">
+  <div class="ctl"><label>Start (date & time)</label><input type="datetime-local" id="start" value="2026-07-05T10:00"></div>
+  <div class="ctl"><label>Target total (hours)</label><input type="number" id="target" value="72" min="20" max="120" step="0.5" style="width:90px"></div>
+  <div class="ctl"><label>Nap length (hours)</label><input type="number" id="sleep" value="2" min="0" max="6" step="0.5" style="width:90px"></div>
+  <button class="preset" onclick="preset(48,2)">48h push</button>
+  <button class="preset" onclick="preset(60,2)">60h</button>
+  <button class="preset" onclick="preset(72,2)">72h aim</button>
+  <button class="preset" onclick="preset(90,2)">90h cruise</button>
+ </div>
+</div>
+<p class="note" id="movinfo"></p>
+
 <h2>🗺️ Route map</h2>
 <div id="map"></div>
 <div class="legend">
@@ -336,25 +356,7 @@ Sognefjellet (km 692, 1421 m · ~40 km no services) · Valdresflye (km 860, 1390
 </tr>
 </tbody></table></div>
 
-<h2>⏱️ Pacing plan & resupply timing</h2>
-<div class="card">
- <div class="timehero">
-  <div><span class="bignum" id="bigtarget">72</span><span class="bigunit">hours target</span></div>
-  <div class="bigfinish" id="bigfinish"></div>
- </div>
- <input type="range" id="targetSlider" min="20" max="100" step="1" value="72" class="slider">
- <div class="sliderlabels"><span>20h</span><span>40h</span><span>60h</span><span>80h</span><span>100h</span></div>
- <div class="controls" style="margin-top:18px">
-  <div class="ctl"><label>Start (date & time)</label><input type="datetime-local" id="start" value="2026-07-05T10:00"></div>
-  <div class="ctl"><label>Target total (hours)</label><input type="number" id="target" value="72" min="20" max="120" step="0.5" style="width:90px"></div>
-  <div class="ctl"><label>Nap length (hours)</label><input type="number" id="sleep" value="2" min="0" max="6" step="0.5" style="width:90px"></div>
-  <button class="preset" onclick="preset(48,2)">48h push</button>
-  <button class="preset" onclick="preset(60,2)">60h</button>
-  <button class="preset" onclick="preset(72,2)">72h aim</button>
-  <button class="preset" onclick="preset(90,2)">90h cruise</button>
- </div>
-</div>
-<p class="note" id="movinfo"></p>
+<h2>📋 Schedule &amp; resupply timing</h2>
 <div class="tablewrap">
 <table>
 <thead><tr><th>km</th><th>Place &amp; services</th><th>Climbed</th><th>ETA</th><th>Shops?</th></tr></thead>
