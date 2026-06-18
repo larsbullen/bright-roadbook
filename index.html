@@ -559,9 +559,11 @@ SHOPS.forEach(s=>{
 
 // ---------- ELEVATION PROFILE ----------
 const ctx=document.getElementById('profile');
-const prof=DATA.route.map(p=>({x:p[3],y:p[2]}));
+const cumGainArr=[]; let _cg=0;
+const prof=DATA.route.map((p,i)=>{ if(i>0){const dd=p[2]-DATA.route[i-1][2]; if(dd>0)_cg+=dd;} cumGainArr.push(_cg); return {x:p[3],y:p[2],g:Math.round(_cg)}; });
+const nearestGain=km=>{let bi=0,bd=Infinity;DATA.route.forEach((p,i)=>{const d=Math.abs(p[3]-km);if(d<bd){bd=d;bi=i;}});return Math.round(cumGainArr[bi]);};
 const wptPts=DATA.wpts.filter(w=>['sleep','warning','resupply'].includes(w.type))
-  .map(w=>({x:w.km,y:DATA.route.reduce((a,p)=>Math.abs(p[3]-w.km)<Math.abs(a[3]-w.km)?p:a)[2],t:w.type,n:w.name}));
+  .map(w=>({x:w.km,y:DATA.route.reduce((a,p)=>Math.abs(p[3]-w.km)<Math.abs(a[3]-w.km)?p:a)[2],t:w.type,n:w.name,g:nearestGain(w.km)}));
 const elevChart=new Chart(ctx,{type:'line',
  data:{datasets:[
   {data:prof,borderColor:'#ff6a00',borderWidth:1.4,fill:true,
@@ -577,7 +579,7 @@ const elevChart=new Chart(ctx,{type:'line',
    y:{title:{display:true,text:'Elevation (m)',color:'#90a0b5'},ticks:{color:'#90a0b5'},grid:{color:'#22303f'}}},
   plugins:{legend:{display:false},
    tooltip:{callbacks:{title:i=>i[0].raw.n?i[0].raw.n:`${i[0].parsed.x.toFixed(0)} km`,
-     label:i=>`${Math.round(i.parsed.y)} m`}}}}
+     label:i=>{const g=i.raw&&i.raw.g; return g!=null?[`${Math.round(i.parsed.y)} m elevation`,`↑ ${g.toLocaleString()} m total climb`]:`${Math.round(i.parsed.y)} m`;}}}}}
 });
 
 // ---------- LINK PROFILE HOVER -> MAP MARKER ----------
