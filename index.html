@@ -113,7 +113,7 @@ path.hovermk{filter:drop-shadow(0 0 5px rgba(255,106,0,.9))}
 Even under the midnight sun the high passes sit near freezing at "night" with wind & snow patches — a sleeping-bag bivy up there is a real hypothermia risk. The route drops to warm valley bottoms at the right spots.<br><br>
 <b>★ Primary: Øvre Årdal — km 740, 12 m (sea level).</b> The best bivy on course: warmest air, sheltered fjord town, 24h services, and it sits <b>right after Sognefjellet</b> (hardest climb done) and <b>before Valdresflye</b> (fresh legs for it). At a fast pace you'd arrive ~18–22h in — ideal for a 2–4h sleep.<br>
 <b>Sleeping ~2 h per 24 h?</b> You'll need a <i>chain</i> of low, sheltered spots. Use these in order as your fatigue window lands — the pacing planner below auto-places a nap at the best one near each rest mark:<br>
-<b>① Sunndalsøra</b> (km 210, sea level) · <b>② Åndalsnes</b> (km 380, sea level) · <b>③ Strynedalen</b> (km 510, low valley — Stryn town is a 9 km W detour) · <b>④ Lom</b> (km 640, 392 m — before Sognefjellet) · <b>★⑤ Øvre Årdal</b> (km 740, 12 m — the prime spot) · <b>⑥ Vågåmo / Otta</b> (km 930–940, ~370 m) · <b>⑦ Alvdal</b> (km 1080, 596 m — last chance).<br>
+<b>① Sunndalsøra</b> (km 210, sea level) · <b>② Åndalsnes</b> (km 380, sea level) · <b>③ Stranda</b> (km 450, sea level — sheltered fjord town, 24h fuel & shops) · <b>④ Strynedalen</b> (km 510, low valley — Stryn town is a 9 km W detour) · <b>⑤ Lom</b> (km 640, 392 m — before Sognefjellet) · <b>★⑥ Øvre Årdal</b> (km 740, 12 m — the prime spot) · <b>⑦ Vågåmo / Otta</b> (km 930–940, ~370 m) · <b>⑧ Alvdal</b> (km 1080, 596 m — last chance).<br>
 Golden rule still holds: always take your nap at the <i>low valley town before</i> a big cold pass, never after starting the climb.<br><br>
 <b>Bivy micro-tips:</b> sleep slightly <i>up-slope</i> (cold air & frost pool on the valley floor); use gapahuk lean-tos, rasteplass pull-offs, bus shelters or barn lees; get out of wind & under tree cover; reflective bivy bag over the sleeping bag. Right-to-roam (allemannsretten) applies on uncultivated land &gt;150 m from houses.
 </details>
@@ -619,7 +619,7 @@ const C=0.035; // 100m climb ≈ 3.5 flat-km of time
 const stopMin={resupply:15,store:5,start:0,warning:0,sleep:15};
 const totalEffort=DATA.totalKm + DATA.totalGain*C;
 // low/sheltered towns that make safe bivy spots (matched by name)
-const SLEEPKEYS=['Sunnda','Åndalsnes','Stryn','Lom','Årdal','Vågåmo','Otta','Alvdal'];
+const SLEEPKEYS=['Sunnda','Åndalsnes','Stranda','Stryn','Lom','Årdal','Vågåmo','Otta','Alvdal'];
 const isSleepSpot=w=>SLEEPKEYS.some(k=>w.name.indexOf(k)>=0);
 function fmtClock(d){return d.toLocaleString('en-GB',{weekday:'short',hour:'2-digit',minute:'2-digit',hour12:false});}
 function fmtDur(h){const m=Math.round(h*60);return `${Math.floor(m/60)}h${String(m%60).padStart(2,'0')}`;}
