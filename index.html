@@ -150,6 +150,9 @@ tr.nextstop td{background:#13243a !important;box-shadow:inset 3px 0 0 var(--blue
   </div>
   <div class="ctl"><label>km done</label><input type="number" id="raceKm" min="0" max="1132" step="1" value="0" style="width:104px;font-size:21px;font-weight:800"></div>
  </div>
+ <label style="display:inline-flex;align-items:center;gap:8px;margin-top:14px;font-size:13px;color:var(--mut);cursor:pointer">
+  <input type="checkbox" id="devSim" style="width:16px;height:16px;accent-color:#ff2d55"> 🧪 Dev: pretend 24 h has elapsed (preview before race day)
+ </label>
  <div id="raceStatus" class="racestatus"></div>
 </div>
 <div id="raceAhead"></div>
@@ -880,7 +883,8 @@ function aheadCard(tag,name,detail){ return `<div class="aheadcard"><div class="
 function raceUpdate(){
   const start=new Date($('start').value);
   let km=Math.max(0,Math.min(DATA.totalKm,parseFloat($('raceKm').value)||0));
-  const now=new Date(), elapsedH=(now-start)/3600000;
+  const dev=$('devSim')&&$('devSim').checked;
+  const now=dev?new Date(start.getTime()+24*3600*1000):new Date(), elapsedH=(now-start)/3600000;
   window.raceLineKm=km; elevChart.update('none'); setRaceMarker(km);
   // schedule table: grey passed rows, outline the next stop
   let nextMarked=false;
@@ -952,6 +956,9 @@ function setMode(m){
   rk.addEventListener('input',()=>sync(parseFloat(rk.value),false));
   let saved=0; try{saved=parseFloat(localStorage.getItem('bm_raceKm'))||0;}catch(e){}
   rk.value=saved; rs.value=saved;
+  const dv=$('devSim');
+  try{dv.checked=localStorage.getItem('bm_dev24')==='1';}catch(e){}
+  dv.addEventListener('change',()=>{ try{localStorage.setItem('bm_dev24',dv.checked?'1':'0');}catch(e){} if(MODE==='race')raceUpdate(); });
   let mode='plan'; try{mode=localStorage.getItem('bm_mode')||'plan';}catch(e){}
   setMode(mode);
   setInterval(()=>{ if(MODE==='race')raceUpdate(); },30000); // keep elapsed/projection live
