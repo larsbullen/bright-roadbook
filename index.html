@@ -88,7 +88,9 @@ path.hovermk{filter:drop-shadow(0 0 5px rgba(255,106,0,.9))}
 html.js .tabpane{display:none}
 html.js .tabpane.active{display:block;animation:fadetab .18s ease}
 @keyframes fadetab{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:none}}
-.modetoggle{display:inline-flex;gap:4px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:4px;margin:0 0 16px}
+.hdr{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px 16px;margin-bottom:16px}
+.hdr h1{margin:0}
+.modetoggle{display:inline-flex;gap:4px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:4px}
 .modebtn{background:none;border:none;color:var(--mut);font:inherit;font-weight:700;font-size:15px;padding:9px 20px;border-radius:9px;cursor:pointer}
 .modebtn.active{background:var(--blue);color:#fff}
 .modebtn:not(.active):hover{color:var(--ink)}
@@ -113,11 +115,12 @@ tr.nextstop td{background:#13243a !important;box-shadow:inset 3px 0 0 var(--blue
 <script>document.documentElement.classList.add('js')</script>
 <body>
 <div class="wrap">
+<div class="hdr">
 <h1>🌙 Bright Midnight 2026 — Roadbook</h1>
-
 <div class="modetoggle" role="tablist">
  <button id="modePlan" class="modebtn active" onclick="setMode('plan')">🗺️ Planning</button>
  <button id="modeRace" class="modebtn" onclick="setMode('race')">🏁 Racing</button>
+</div>
 </div>
 
 <div id="planView">
