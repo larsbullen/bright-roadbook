@@ -71,8 +71,20 @@ path.hovermk{filter:drop-shadow(0 0 5px rgba(255,106,0,.9))}
 .napbadge{display:inline-block;background:#2e2147;color:#cda8ff;border:1px solid #5a3f8a;border-radius:20px;padding:1px 9px;font-size:11px;font-weight:800;margin-left:6px;white-space:nowrap}
 .shopmk{cursor:pointer}.shopmk:hover{stroke:#fff;stroke-width:4}
 .shopfilter{font-size:13px}.shopfilter.active{border-color:var(--blue);background:#15324e;color:#fff;font-weight:700}
+.tabbar{position:sticky;top:0;z-index:600;display:flex;gap:4px;overflow-x:auto;-webkit-overflow-scrolling:touch;
+  background:var(--bg);padding:8px 0 0;margin:22px 0 0;border-bottom:1px solid var(--line)}
+.tab{flex:0 0 auto;background:var(--panel);color:var(--mut);border:1px solid var(--line);border-bottom:none;
+  border-radius:10px 10px 0 0;padding:10px 16px;font-size:15px;font-weight:600;cursor:pointer;white-space:nowrap;
+  font-family:inherit;margin-bottom:-1px}
+.tab:hover{color:var(--ink)}
+.tab.active{background:var(--panel2);color:var(--ink);border-color:#3a4a5c;border-bottom:1px solid var(--panel2)}
+.tabpane{padding-top:4px}
+html.js .tabpane{display:none}
+html.js .tabpane.active{display:block;animation:fadetab .18s ease}
+@keyframes fadetab{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:none}}
 </style>
 </head>
+<script>document.documentElement.classList.add('js')</script>
 <body>
 <div class="wrap">
 <h1>🌙 Bright Midnight 2026 — Roadbook</h1>
@@ -127,22 +139,15 @@ path.hovermk{filter:drop-shadow(0 0 5px rgba(255,106,0,.9))}
 <h2>📈 Elevation profile</h2>
 <div class="card" style="height:340px"><canvas id="profile"></canvas></div>
 
-<details class="callout">
-<summary><b>🛏️ Sleep strategy — sleep LOW, sleep SHELTERED.</b></summary>
-Even under the midnight sun the high passes sit near freezing at "night" with wind & snow patches — a sleeping-bag bivy up there is a real hypothermia risk. The route drops to warm valley bottoms at the right spots.<br><br>
-<b>★ Primary: Øvre Årdal — km 740, 12 m (sea level).</b> The best bivy on course: warmest air, sheltered fjord town, 24h services, and it sits <b>right after Sognefjellet</b> (hardest climb done) and <b>before Valdresflye</b> (fresh legs for it). At a fast pace you'd arrive ~18–22h in — ideal for a 2–4h sleep.<br>
-<b>Sleeping ~2 h per 24 h?</b> You'll need a <i>chain</i> of low, sheltered spots. Use these in order as your fatigue window lands — the pacing planner below auto-places a nap at the best one near each rest mark:<br>
-<b>① Sunndalsøra</b> (km 210, sea level) · <b>② Åndalsnes</b> (km 380, sea level) · <b>③ Stranda</b> (km 450, sea level — sheltered fjord town, 24h fuel & shops) · <b>④ Strynedalen</b> (km 510, low valley — Stryn town is a 9 km W detour) · <b>⑤ Lom</b> (km 640, 392 m — before Sognefjellet) · <b>★⑥ Øvre Årdal</b> (km 740, 12 m — the prime spot) · <b>⑦ Vågåmo / Otta</b> (km 930–940, ~370 m) · <b>⑧ Alvdal</b> (km 1080, 596 m — last chance).<br>
-Golden rule still holds: always take your nap at the <i>low valley town before</i> a big cold pass, never after starting the climb.<br><br>
-<b>Bivy micro-tips:</b> sleep slightly <i>up-slope</i> (cold air & frost pool on the valley floor); use gapahuk lean-tos, rasteplass pull-offs, bus shelters or barn lees; get out of wind & under tree cover; reflective bivy bag over the sleeping bag. Right-to-roam (allemannsretten) applies on uncultivated land &gt;150 m from houses.
-</details>
-
-<div class="warnbox">
-<b>⚠️ Cold high-pass danger zones — full kit, do NOT bivy:</b>
-Sognefjellet (km 692, 1421 m · ~40 km no services) · Valdresflye (km 860, 1390 m) · Grotli/Strynefjellet (km 562, 1137 m) · Dovre/Grimsdalen (km 989, 1170 m, late & tired) · Tyin/Filefjell (km 764, 1076 m · a +1056 m climb straight off sea-level Øvre Årdal).
-138 km of the route is above 1000 m. Carry food &amp; warm/wind/rain layers <i>into</i> these — the biggest verified on-route gaps are Sunndalsøra→Vistdal (115 km, Aursjøvegen), Dovre→Alvdal (89 km, Dovrefjell), Bøverdalen→Årdal (83 km, Sognefjellet) and Hjelledalen→Bruvoll (72 km, Strynefjellet). See the Resupply section.
+<div class="tabbar" role="tablist">
+ <button class="tab active" data-pane="schedule" onclick="showTab('schedule')">📋 Schedule</button>
+ <button class="tab" data-pane="climbs" onclick="showTab('climbs')">⛰️ Climbs</button>
+ <button class="tab" data-pane="supplies" onclick="showTab('supplies')">🛒 Supplies</button>
+ <button class="tab" data-pane="tunnels" onclick="showTab('tunnels')">🚇 Tunnels</button>
+ <button class="tab" data-pane="ferry" onclick="showTab('ferry')">⛴️ Ferry</button>
 </div>
 
+<section class="tabpane" data-pane="climbs">
 <h2>⛰️ Climb-by-climb breakdown</h2>
 <p class="note">All 23 sustained climbs (≥150 m gain), in route order. Max % is the steepest sustained ~1 km (gravel — GPS-smoothed, treat as approximate). Names in CAPS are the marquee passes.</p>
 <div class="tablewrap">
@@ -357,7 +362,9 @@ Sognefjellet (km 692, 1421 m · ~40 km no services) · Valdresflye (km 860, 1390
 <td>1027 m</td>
 </tr>
 </tbody></table></div>
+</section>
 
+<section class="tabpane" data-pane="tunnels">
 <h2>🚇 Tunnels</h2>
 <p class="note">All 20 road tunnels on the line (OpenStreetMap), in route order — <b>15.2 km of tunnel total</b>. Two are long: <b>Viketunnelen 4.3 km (km 291)</b> and <b>Streketunnelen 3.8 km (km 481)</b> — run rear + front lights and a hi-vis layer. Tiny <40 m underpasses are omitted. None is signed cyclist-forbidden in OSM (Norwegian tunnels generally allow bikes unless posted). The route deliberately <b>skips the 5.7 km Filefjellstunnelen</b> on the E16 by climbing the old Filefjell pass instead.</p>
 <div class="tablewrap">
@@ -385,7 +392,9 @@ Sognefjellet (km 692, 1421 m · ~40 km no services) · Valdresflye (km 860, 1390
 <tr><td>746</td><td>Jåtelitunnelen II</td><td>96 m</td><td>fv53</td></tr>
 <tr><td>759</td><td><span class="mut">(unnamed)</span></td><td>294 m</td><td>track</td><td></td></tr>
 </tbody></table></div>
+</section>
 
+<section class="tabpane active" data-pane="schedule">
 <h2>📋 Schedule &amp; resupply timing</h2>
 <div class="tablewrap">
 <table>
@@ -394,8 +403,26 @@ Sognefjellet (km 692, 1421 m · ~40 km no services) · Valdresflye (km 860, 1390
 </table>
 </div>
 
-<button class="preset" id="ferryBtn" onclick="toggleFerry()" style="font-size:14px;padding:11px 18px;margin-top:10px">⛴️ Liabygda → Stranda ferry — timetable &amp; your crossing</button>
-<div id="ferryPanel" style="display:none;margin-top:12px">
+<details class="callout" style="margin-top:16px">
+<summary><b>🛏️ Sleep strategy — sleep LOW, sleep SHELTERED.</b></summary>
+Even under the midnight sun the high passes sit near freezing at "night" with wind & snow patches — a sleeping-bag bivy up there is a real hypothermia risk. The route drops to warm valley bottoms at the right spots.<br><br>
+<b>★ Primary: Øvre Årdal — km 740, 12 m (sea level).</b> The best bivy on course: warmest air, sheltered fjord town, 24h services, and it sits <b>right after Sognefjellet</b> (hardest climb done) and <b>before Valdresflye</b> (fresh legs for it). At a fast pace you'd arrive ~18–22h in — ideal for a 2–4h sleep.<br>
+<b>Sleeping ~2 h per 24 h?</b> You'll need a <i>chain</i> of low, sheltered spots. Use these in order as your fatigue window lands — the pacing planner above auto-places a nap at the best one near each rest mark:<br>
+<b>① Sunndalsøra</b> (km 210, sea level) · <b>② Åndalsnes</b> (km 380, sea level) · <b>③ Stranda</b> (km 450, sea level — sheltered fjord town, 24h fuel & shops) · <b>④ Strynedalen</b> (km 510, low valley — Stryn town is a 9 km W detour) · <b>⑤ Lom</b> (km 640, 392 m — before Sognefjellet) · <b>★⑥ Øvre Årdal</b> (km 740, 12 m — the prime spot) · <b>⑦ Vågåmo / Otta</b> (km 930–940, ~370 m) · <b>⑧ Alvdal</b> (km 1080, 596 m — last chance).<br>
+Golden rule still holds: always take your nap at the <i>low valley town before</i> a big cold pass, never after starting the climb.<br><br>
+<b>Bivy micro-tips:</b> sleep slightly <i>up-slope</i> (cold air & frost pool on the valley floor); use gapahuk lean-tos, rasteplass pull-offs, bus shelters or barn lees; get out of wind & under tree cover; reflective bivy bag over the sleeping bag. Right-to-roam (allemannsretten) applies on uncultivated land &gt;150 m from houses.
+</details>
+
+<div class="warnbox">
+<b>⚠️ Cold high-pass danger zones — full kit, do NOT bivy:</b>
+Sognefjellet (km 692, 1421 m · ~40 km no services) · Valdresflye (km 860, 1390 m) · Grotli/Strynefjellet (km 562, 1137 m) · Dovre/Grimsdalen (km 989, 1170 m, late & tired) · Tyin/Filefjell (km 764, 1076 m · a +1056 m climb straight off sea-level Øvre Årdal).
+138 km of the route is above 1000 m. Carry food &amp; warm/wind/rain layers <i>into</i> these — the biggest verified on-route gaps are Sunndalsøra→Vistdal (115 km, Aursjøvegen), Dovre→Alvdal (89 km, Dovrefjell), Bøverdalen→Årdal (83 km, Sognefjellet) and Hjelledalen→Bruvoll (72 km, Strynefjellet). See the Supplies tab.
+</div>
+</section>
+
+<section class="tabpane" data-pane="ferry">
+<h2>⛴️ Ferry — Liabygda → Stranda crossing</h2>
+<div id="ferryPanel" style="margin-top:4px">
 <div class="callout"><b>⛴️ Storfjorden crossing · Liabygda → Stranda</b> (≈ km 449 · Fjord1 <i>MF&nbsp;Volda</i> · fv650 · ~13 min · <b>free for cyclists</b>). There is <b>no bridge</b> — the drawn GPX line snaps over land, but the route crosses here by boat.
  <div id="ferryEta" style="margin-top:10px"></div>
 </div>
@@ -410,7 +437,9 @@ Sognefjellet (km 692, 1421 m · ~40 km no services) · Valdresflye (km 860, 1390
 </table></div>
 <p class="note">Times from Fjord1 / fergeruter.info (2026 schedule) — <b>re-check before the start</b>, summer extras &amp; holidays vary. The reverse leg (Stranda→Liabygda) runs on a near-mirror hourly/half-hourly pattern 06:00–23:00.</p>
 </div>
+</section>
 
+<section class="tabpane" data-pane="supplies">
 <h2>🛒 Resupply — verified shops &amp; gaps (OpenStreetMap)</h2>
 <p class="note">Every shop &amp; fuel station within 3.5 km of the GPX, pulled from OpenStreetMap and matched to route-km. Hours change — re-check before July — but this is the real on-the-ground picture.</p>
 <div class="warnbox"><b>⚠️ Three "towns" the route does NOT enter</b> (marker is on the line, but the supermarkets are a detour): <b>Stryn</b> ~9 km W (use Joker Hjelledalen instead) · <b>Folldal</b> ~6.5 km N · <b>Dombås</b> ~10 km W. Don't bank on their shops.</div>
@@ -460,8 +489,9 @@ Note: most regular supermarkets close <b>all day Sunday</b> and at <b>22:00–23
 <div class="card">
 <b>Water = basically a non-issue.</b> Tap water is excellent & free everywhere; mountain streams above the farmland line are safe untreated and you'll cross hundreds. Refill at fuel stations, churches/cemeteries (outdoor taps), rasteplasser and DNT lodges. Carry ~1.5–2 L and top up often; a small filter is backup insurance for lowland/farm sections.<br><br>
 <b>Repairs = be self-sufficient.</b> Real bike shops only exist in the bigger towns (Tynset, Oppdal, Sunndalsøra, Åndalsnes, Stryn, Lom, Beitostølen, Vågå/Otta) and many keep short summer hours / shut at night. The hard middle third (Stryn→Lom→Årdal→Beitostølen) has the fewest options. Carry tubes/plugs, a spare derailleur hanger, quick-links, brake pads & sealant. <small class="mut">(Exact shop names/hours not verified here — confirm the ones near your planned arrival times on Google Maps before the start.)</small><br><br>
-<b>24h resupply:</b> regular groceries run ~08:00–22:00 (shorter Sat) and <b>are closed all day Sunday</b> in Norway — which is your entire day 1. So between ~22:00–08:00, and the whole of Sunday, lean on <b>24h fuel</b> (Circle K, Esso, YX, Uno-X), the race's <b>unmanned supermarkets</b> (scan bank card to enter Coop/Joker "døgnåpen" stores), and small <b>Joker/Bunnpris &lt;100 m²</b> shops (allowed to open Sundays). Carry enough food from the start to cover day 1. <b>Verified on-route 24h:</b> Circle K E6 Otta (km 940, manned, hot food) &amp; Circle K Alvdal (km 1066, 24/7); plus 24h shops Coop Prix Bøverdalen (km 658) &amp; Bruvoll (km 609), both Mo–Sa (closed Sun). Most other shops shut 22:00–24:00 and all day Sunday — see the Resupply section below.
+<b>24h resupply:</b> regular groceries run ~08:00–22:00 (shorter Sat) and <b>are closed all day Sunday</b> in Norway — which is your entire day 1. So between ~22:00–08:00, and the whole of Sunday, lean on <b>24h fuel</b> (Circle K, Esso, YX, Uno-X), the race's <b>unmanned supermarkets</b> (scan bank card to enter Coop/Joker "døgnåpen" stores), and small <b>Joker/Bunnpris &lt;100 m²</b> shops (allowed to open Sundays). Carry enough food from the start to cover day 1. <b>Verified on-route 24h:</b> Circle K E6 Otta (km 940, manned, hot food) &amp; Circle K Alvdal (km 1066, 24/7); plus 24h shops Coop Prix Bøverdalen (km 658) &amp; Bruvoll (km 609), both Mo–Sa (closed Sun). Most other shops shut 22:00–24:00 and all day Sunday — see the resupply tables above.
 </div>
+</section>
 
 <p class="note" style="margin-top:30px">Generated from <code>BM2026 v1.1.gpx</code> · 26 165 track points analysed · elevation smoothed. Map © OpenStreetMap contributors. Distances/elevations are from the GPS track and approximate. Companion file: <code>BM2026_services_waypoints.gpx</code> (import into Garmin/Wahoo).</p>
 
@@ -746,6 +776,22 @@ document.getElementById('start').addEventListener('input',recompute);
 document.getElementById('sleep').addEventListener('input',recompute);
 recompute();
 renderShopList('all'); // shop/fuel/food list always shown
+
+// ---------- TABS ----------
+const TAB_NAMES=['schedule','climbs','supplies','tunnels','ferry'];
+function showTab(name){
+  document.querySelectorAll('.tabpane').forEach(p=>p.classList.toggle('active',p.dataset.pane===name));
+  document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',b.dataset.pane===name));
+  if(history.replaceState) history.replaceState(null,'','#'+name);
+}
+(function initTab(){
+  let h=(location.hash||'').replace('#','');
+  showTab(TAB_NAMES.includes(h)?h:'schedule');
+})();
+window.addEventListener('hashchange',function(){
+  const h=(location.hash||'').replace('#','');
+  if(TAB_NAMES.includes(h)) showTab(h);
+});
 </script>
 </div>
 </body></html>
