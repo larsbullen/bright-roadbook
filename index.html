@@ -127,7 +127,7 @@ html.js .tabpane.active{display:block;animation:fadetab .18s ease}
  <span><i class="dot" style="background:#b07bff"></i>💤 Sleep stop (this plan)</span>
  <span><i class="dot" style="background:#ff5c6c"></i>Major climb / high pass</span>
  <span><i class="dot" style="background:#39d98a"></i>🛒 24h/late shop</span>
- <span><i class="dot" style="background:#46566b"></i>🚇 Tunnel (ring = >1 km)</span>
+ <span><i class="dot" style="background:#22d3ee"></i>🚇 Tunnel (ring = >1 km)</span>
  <span style="color:#d7191c">━ climb &gt;8%</span>
  <span style="color:#fc8d59">━ 4–8%</span>
  <span style="color:#ffd24d">━ 1.5–4%</span>
@@ -621,7 +621,7 @@ SHOPS.forEach(s=>{
 TUNNELS.forEach(t=>{
   const [km,len,name,road,lit,la,lo]=t, long=len>=1000;
   const tm=L.circleMarker([la,lo],{radius:long?7:5,color:long?'#ffb454':'#0b0e12',
-    weight:long?2.5:1.5,fillColor:'#46566b',fillOpacity:1}).addTo(map);
+    weight:long?2.5:1.5,fillColor:'#22d3ee',fillOpacity:1}).addTo(map);
   const nm=name||'Tunnel', ll=lit===0?' · <span style="color:#ff5c6c">unlit</span>':'';
   const lenstr=len>=1000?`${(len/1000).toFixed(1)} km`:`${len} m`;
   tm.bindPopup(`<b>🚇 ${nm}</b><br><b>${km} km</b> · ${lenstr} · ${road}${ll}`);
@@ -649,7 +649,7 @@ const elevChart=new Chart(ctx,{type:'line',
    pointBorderColor:'#0f1419',pointBorderWidth:1.5},
   {type:'scatter',data:tunPts,parsing:false,order:0,pointStyle:'rect',
    pointRadius:c=>c.raw?.long?6:4,pointHoverRadius:c=>c.raw?.long?8:6,
-   pointBackgroundColor:'#46566b',
+   pointBackgroundColor:'#22d3ee',
    pointBorderColor:c=>c.raw?.long?'#ffb454':'#0b0e12',pointBorderWidth:c=>c.raw?.long?2:1}
  ]},
  options:{responsive:true,maintainAspectRatio:false,animation:false,
