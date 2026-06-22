@@ -192,7 +192,7 @@ tr.nextstop td{background:#13243a !important;box-shadow:inset 3px 0 0 var(--blue
 <h2>⛰️ Climb-by-climb breakdown</h2>
 <p class="note">All 23 sustained climbs (≥150 m gain), in route order. Max % is the steepest sustained ~1 km (gravel — GPS-smoothed, treat as approximate). Names in CAPS are the marquee passes.</p>
 <div class="tablewrap">
-<table>
+<table id="climbTable">
 <thead><tr><th>From→Top km</th><th>Climb</th><th>Length</th><th>Gain</th><th>Avg %</th><th>Max %</th><th>Tops at</th></tr></thead>
 <tbody>
 <tr>
@@ -409,7 +409,7 @@ tr.nextstop td{background:#13243a !important;box-shadow:inset 3px 0 0 var(--blue
 <h2>🚇 Tunnels</h2>
 <p class="note">All 20 road tunnels on the line (OpenStreetMap), in route order — <b>15.2 km of tunnel total</b>. Two are long: <b>Viketunnelen 4.3 km (km 291)</b> and <b>Streketunnelen 3.8 km (km 481)</b> — run rear + front lights and a hi-vis layer. Tiny <40 m underpasses are omitted. None is signed cyclist-forbidden in OSM (Norwegian tunnels generally allow bikes unless posted). The route deliberately <b>skips the 5.7 km Filefjellstunnelen</b> on the E16 by climbing the old Filefjell pass instead.</p>
 <div class="tablewrap">
-<table>
+<table id="tunnelTable">
 <thead><tr><th>km</th><th>Tunnel</th><th>Length</th><th>Road</th><th>Notes</th></tr></thead>
 <tbody>
 <tr><td>226</td><td><span class="mut">(unnamed)</span></td><td>68 m</td><td>minor road</td><td></td></tr>
@@ -492,7 +492,7 @@ Sognefjellet (km 692, 1421 m · ~40 km no services) · Valdresflye (km 860, 1390
 <p class="note">Every shop &amp; fuel station within 3.5 km of the GPX, pulled from OpenStreetMap and matched to route-km. Hours change — re-check before July — but this is the real on-the-ground picture.</p>
 <div class="warnbox"><b>⚠️ Three "towns" the route does NOT enter</b> (marker is on the line, but the supermarkets are a detour): <b>Stryn</b> ~9 km W (use Joker Hjelledalen instead) · <b>Folldal</b> ~6.5 km N · <b>Dombås</b> ~10 km W. Don't bank on their shops.</div>
 <p class="note" style="margin-top:14px"><b>Longest on-route service gaps</b> — nothing open in between, so carry food &amp; water across these:</p>
-<div class="tablewrap"><table>
+<div class="tablewrap"><table id="gapTable">
 <thead><tr><th>Gap</th><th>km</th><th>Length</th><th>Last shop before → first after</th></tr></thead>
 <tbody>
 <tr><td>Highland start</td><td>9→74</td><td>65 km</td><td>Coop Marked Vingelen → Coop Marked Kvikne</td></tr>
@@ -504,7 +504,7 @@ Sognefjellet (km 692, 1421 m · ~40 km no services) · Valdresflye (km 860, 1390
 <tr><td><b>Dovrefjell / Grimsdalen</b></td><td>976→1065</td><td><b>89 km</b></td><td>Coop Prix Dovre (to 21:00) → Circle K Alvdal (24/7)</td></tr>
 </tbody></table></div>
 <details class="callout" style="margin-top:14px"><summary><b>💡 Clutch shops — open 24h / late / on Sundays</b></summary>(the ones that save you at 03:00 or on day-1 Sunday). All on-route:
-<ul style="margin:8px 0 2px;padding-left:22px">
+<ul id="clutchList" style="margin:8px 0 2px;padding-left:22px">
 <li><b>km 75 · Coop Marked Kvikne</b> — Mo–Sa 06:00–24:00 (closed Sun)</li>
 <li><b>km 170 · Matkroken Sunndalsporten</b> — <b>Mo–Su 06:00–24:00</b> (open Sundays) — last stock-up before the 115 km Aursjøvegen gap</li>
 <li><b>km 204 · Sunndalsøra</b> — Kiwi/Rema/Extra to 23:00; Circle K Sun 08–23</li>
@@ -559,7 +559,7 @@ function renderShopList(cat){
     const det = offm<=350 ? '<span class="open">on route</span>'
               : '~'+(offm*2/1000).toFixed(1)+' km detour';
     const icon = c==='f'?'⛽':c==='g'?'🛒':c==='h'?'🍔':'•';
-    const tr=document.createElement('tr');
+    const tr=document.createElement('tr'); tr.dataset.passkm=km;
     tr.innerHTML='<td><b>'+km+'</b></td><td>'+town+'</td><td>'+icon+' '+typ+'</td><td>'+name+'</td>'+
       '<td>'+(hrs?hrs:'<span class="mut">—</span>')+'</td><td>'+det+'</td>';
     tb.appendChild(tr); shown++;
@@ -569,6 +569,7 @@ function renderShopList(cat){
 function filterShops(cat,el){
   document.querySelectorAll('.shopfilter').forEach(x=>x.classList.remove('active'));
   el.classList.add('active'); renderShopList(cat);
+  if(typeof applyRaceFilter==='function') applyRaceFilter();
 }
 function toggleFerry(){
   const p=document.getElementById('ferryPanel');
@@ -806,7 +807,7 @@ function recompute(){
     else {openTxt=(hr>=8&&hr<22)?'<span class="open">shops open</span>':'<span class="closed">shut → 24h fuel/unmanned</span>';}
     const badge=nap?` <span class="napbadge">💤 SLEEP ${napLen}h</span>`:'';
     _planEta.push({km:w.km,h:elapsed});
-    const tr=document.createElement('tr'); tr.dataset.km=w.km; if(nap)tr.className='sleeprow';
+    const tr=document.createElement('tr'); tr.dataset.km=w.km; tr.dataset.passkm=w.km; if(nap)tr.className='sleeprow';
     tr.innerHTML=`<td><b>${fmtKm(w.km)}</b></td>
       <td>${w.name}${badge}<br><small class="mut">${w.desc}</small></td>
       <td>+${w.cumGain}</td>
@@ -855,6 +856,27 @@ window.addEventListener('hashchange',function(){
 // ================= RACING MODE =================
 let MODE='plan', raceMarker=null;
 const $=id=>document.getElementById(id);
+function _nums(s){const m=String(s).match(/\d+/g);return m?m.map(Number):[];}
+function tagStatic(){ // give each static row a data-passkm (the km past which it's behind you)
+  document.querySelectorAll('#climbTable tbody tr').forEach(tr=>{const n=_nums(tr.cells[0].textContent);if(n.length)tr.dataset.passkm=Math.max.apply(null,n);}); // crest km
+  document.querySelectorAll('#tunnelTable tbody tr').forEach(tr=>{const n=_nums(tr.cells[0].textContent);if(n.length)tr.dataset.passkm=n[0];});
+  document.querySelectorAll('#gapTable tbody tr').forEach(tr=>{const n=_nums(tr.cells[1].textContent);if(n.length)tr.dataset.passkm=n[n.length-1];}); // gap end
+  document.querySelectorAll('#clutchList li').forEach(li=>{const n=_nums(li.textContent);if(n.length)li.dataset.passkm=n[0];});
+}
+function applyRaceFilter(){ // in race mode, hide anything already behind the rider
+  const active=(MODE==='race'), km=active?(parseFloat($('raceKm').value)||0):0;
+  document.querySelectorAll('[data-passkm]').forEach(el=>{
+    const pk=parseFloat(el.dataset.passkm);
+    el.style.display=(active && !isNaN(pk) && pk<=km)?'none':'';
+  });
+  // outline the next upcoming schedule stop
+  let nextDone=false;
+  document.querySelectorAll('#pacebody tr').forEach(tr=>{
+    const vis=tr.style.display!=='none';
+    tr.classList.toggle('nextstop',active && vis && !nextDone);
+    if(active && vis && !nextDone)nextDone=true;
+  });
+}
 function planElapsedAt(km){ // interpolate the plan's ETA curve (hours since start) at any km
   const e=window.planEta; if(!e||!e.length)return null;
   if(km<=e[0].km)return e[0].h*(e[0].km?km/e[0].km:1);
@@ -886,14 +908,7 @@ function raceUpdate(){
   const dev=$('devSim')&&$('devSim').checked;
   const now=dev?new Date(start.getTime()+24*3600*1000):new Date(), elapsedH=(now-start)/3600000;
   window.raceLineKm=km; elevChart.update('none'); setRaceMarker(km);
-  // schedule table: grey passed rows, outline the next stop
-  let nextMarked=false;
-  document.querySelectorAll('#pacebody tr').forEach(tr=>{
-    const k=parseFloat(tr.dataset.km), passed=k<=km+0.01;
-    tr.classList.toggle('passed',passed);
-    tr.classList.toggle('nextstop',!passed&&!nextMarked);
-    if(!passed&&!nextMarked)nextMarked=true;
-  });
+  applyRaceFilter();
   const S=$('raceStatus'), A=$('raceAhead');
   if(elapsedH<0){ S.innerHTML=`<div style="grid-column:1/-1"><div class="bigstat">⏳ Race hasn't started</div><div class="k">Starts ${fmtClock(start)} — in ${fmtDur(-elapsedH)}</div></div>`; A.innerHTML=''; return; }
   const gain=nearestGain(km), effortDone=km+gain*C, pct=km/DATA.totalKm*100;
@@ -945,8 +960,7 @@ function setMode(m){
   $('raceView').style.display=m==='race'?'':'none';
   try{localStorage.setItem('bm_mode',m);}catch(e){}
   if(m==='race'){ recompute(); raceUpdate(); }
-  else { window.raceLineKm=null; elevChart.update('none'); clearRaceMarker();
-    document.querySelectorAll('#pacebody tr').forEach(tr=>tr.classList.remove('passed','nextstop')); }
+  else { window.raceLineKm=null; elevChart.update('none'); clearRaceMarker(); applyRaceFilter(); }
 }
 (function(){
   const rk=$('raceKm'), rs=$('raceKmSlider');
@@ -959,6 +973,7 @@ function setMode(m){
   const dv=$('devSim');
   try{dv.checked=localStorage.getItem('bm_dev24')==='1';}catch(e){}
   dv.addEventListener('change',()=>{ try{localStorage.setItem('bm_dev24',dv.checked?'1':'0');}catch(e){} if(MODE==='race')raceUpdate(); });
+  tagStatic();
   let mode='plan'; try{mode=localStorage.getItem('bm_mode')||'plan';}catch(e){}
   setMode(mode);
   setInterval(()=>{ if(MODE==='race')raceUpdate(); },30000); // keep elapsed/projection live
