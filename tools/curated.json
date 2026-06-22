@@ -11,6 +11,8 @@
   "//dip": "a descent bigger than this splits/ends a climb",
   "shop_overpass_radius_m": 3500,
   "//shop": "SHOPLIST = shops/fuel/food within this of the line",
+  "bike_overpass_radius_m": 4500,
+  "//bike": "bike/sports shops (cat 'b', 🔧) searched a bit wider — riders detour for a repair",
   "tunnel_overpass_radius_m": 30,
   "tunnel_min_len_m": 40
  },

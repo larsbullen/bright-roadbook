@@ -199,12 +199,14 @@ def query_shops(pts, cum_m, snap, cfg):
     CHUNK = 700
     flt = ('nwr(around:%d,{C})["shop"~"supermarket|convenience|general"];'
            'nwr(around:%d,{C})["amenity"="fuel"];'
-           'nwr(around:%d,{C})["amenity"="fast_food"];' )
-    r = cfg["shop_overpass_radius_m"]
+           'nwr(around:%d,{C})["amenity"="fast_food"];'
+           'nwr(around:%d,{C})["shop"~"bicycle|sports"];'           # bike repair / sports retailers
+           'nwr(around:%d,{C})["service:bicycle:repair"="yes"];')
+    r = cfg["shop_overpass_radius_m"]; rb = cfg.get("bike_overpass_radius_m", 4500)
     for s in range(0, len(anchors), CHUNK):
         seg = anchors[s:s+CHUNK+1]
         coords = ",".join("%.5f,%.5f" % (la, lo) for la, lo, *_ in seg)
-        q = "[out:json][timeout:150];(" + flt.replace("{C}", coords) % (r, r, r) + ");out tags center;"
+        q = "[out:json][timeout:150];(" + flt.replace("{C}", coords) % (r, r, r, rb, rb) + ");out tags center;"
         for e in overpass(q)["elements"]:
             seen[(e["type"], e["id"])] = e
         time.sleep(3)
@@ -215,8 +217,12 @@ def query_shops(pts, cum_m, snap, cfg):
         km, off = snap(c["lat"], c["lon"])
         tg = e.get("tags", {})
         shop = tg.get("shop", ""); amen = tg.get("amenity", "")
-        cat = "f" if amen == "fuel" else ("h" if amen == "fast_food" else ("g" if shop in ("supermarket", "convenience", "general") else "o"))
-        typ = {"f": "Fuel", "h": "Hot food", "g": "Grocery", "o": "Shop"}[cat]
+        if amen == "fuel": cat = "f"
+        elif amen == "fast_food": cat = "h"
+        elif shop in ("bicycle", "sports") or tg.get("service:bicycle:repair") == "yes": cat = "b"
+        elif shop in ("supermarket", "convenience", "general"): cat = "g"
+        else: cat = "o"
+        typ = {"f": "Fuel", "h": "Hot food", "g": "Grocery", "b": "Bike/sport", "o": "Shop"}[cat]
         name = tg.get("name", "?")
         hrs = tg.get("opening_hours", "")
         rows.append([round(km), round(off), cat, typ, name, hrs, tg.get("addr:city", "") or tg.get("addr:place", "")])
