@@ -88,6 +88,26 @@ path.hovermk{filter:drop-shadow(0 0 5px rgba(255,106,0,.9))}
 html.js .tabpane{display:none}
 html.js .tabpane.active{display:block;animation:fadetab .18s ease}
 @keyframes fadetab{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:none}}
+.modetoggle{display:inline-flex;gap:4px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:4px;margin:0 0 16px}
+.modebtn{background:none;border:none;color:var(--mut);font:inherit;font-weight:700;font-size:15px;padding:9px 20px;border-radius:9px;cursor:pointer}
+.modebtn.active{background:var(--blue);color:#fff}
+.modebtn:not(.active):hover{color:var(--ink)}
+.racein{display:flex;gap:20px;align-items:flex-end;flex-wrap:wrap}
+.racestatus{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:18px}
+.rstat{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.rstat .v{font-size:21px;font-weight:800;line-height:1.15}
+.rstat .k{font-size:11px;color:var(--mut);text-transform:uppercase;letter-spacing:.5px;margin-top:3px}
+.rdelta-ahead{color:var(--green)}.rdelta-behind{color:var(--amber)}
+.bigstat{font-size:20px;font-weight:800;margin-bottom:2px}
+#raceAhead{display:grid;grid-template-columns:repeat(auto-fit,minmax(225px,1fr));gap:12px;margin-top:14px}
+.aheadcard{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:13px 15px}
+.aheadcard .ah{font-size:11px;color:var(--mut);text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px}
+.aheadcard .an{font-size:16px;font-weight:700;line-height:1.25}
+.aheadcard .ad{font-size:13px;color:var(--mut);margin-top:3px}
+tr.passed td{opacity:.4}
+tr.nextstop td{background:#13243a !important;box-shadow:inset 3px 0 0 var(--blue)}
+.racemk{animation:racepulse 1.6s ease-in-out infinite}
+@keyframes racepulse{0%,100%{filter:drop-shadow(0 0 3px rgba(255,45,85,.9))}50%{filter:drop-shadow(0 0 10px rgba(255,45,85,1))}}
 </style>
 </head>
 <script>document.documentElement.classList.add('js')</script>
@@ -95,6 +115,12 @@ html.js .tabpane.active{display:block;animation:fadetab .18s ease}
 <div class="wrap">
 <h1>🌙 Bright Midnight 2026 — Roadbook</h1>
 
+<div class="modetoggle" role="tablist">
+ <button id="modePlan" class="modebtn active" onclick="setMode('plan')">🗺️ Planning</button>
+ <button id="modeRace" class="modebtn" onclick="setMode('race')">🏁 Racing</button>
+</div>
+
+<div id="planView">
 <div class="card">
  <div class="timehero">
   <div><span class="bignum" id="bigtarget">72</span><span class="bigunit">hours target</span></div>
@@ -113,6 +139,22 @@ html.js .tabpane.active{display:block;animation:fadetab .18s ease}
  </div>
 </div>
 <p class="note" id="movinfo"></p>
+</div><!--/planView-->
+
+<div id="raceView" style="display:none">
+<div class="card">
+ <div class="racein">
+  <div class="ctl" style="flex:1;min-width:240px"><label>📍 Distance completed — drag or type your km</label>
+   <input type="range" id="raceKmSlider" min="0" max="1132" step="1" value="0" class="slider">
+   <div class="sliderlabels"><span>0</span><span>283</span><span>566</span><span>849</span><span>1132 km</span></div>
+  </div>
+  <div class="ctl"><label>km done</label><input type="number" id="raceKm" min="0" max="1132" step="1" value="0" style="width:104px;font-size:21px;font-weight:800"></div>
+ </div>
+ <div id="raceStatus" class="racestatus"></div>
+</div>
+<div id="raceAhead"></div>
+<p class="note">Uses your device clock · race starts Sun 5 Jul 2026 10:00 · projection is terrain-weighted from your actual pace so far (includes your stops). Re-enter your km whenever you check in.</p>
+</div>
 
 <h2>🗺️ Route map</h2>
 <div id="map"></div>
@@ -642,6 +684,15 @@ const tunPts=TUNNELS.map(t=>{const km=t[0],len=t[1];return {
   x:km,y:DATA.route.reduce((a,p)=>Math.abs(p[3]-km)<Math.abs(a[3]-km)?p:a)[2],
   tun:true,long:len>=1000,n:(t[2]||'Tunnel')+' 🚇',
   lenstr:len>=1000?(len/1000).toFixed(1)+' km':len+' m',road:t[3],lit:t[4]};});
+const raceLinePlugin={id:'raceline',afterDatasetsDraw(c){
+  const km=window.raceLineKm; if(km==null)return;
+  const a=c.chartArea, xs=c.scales.x, x=xs.getPixelForValue(km), g=c.ctx;
+  g.save();
+  g.fillStyle='rgba(120,140,160,.16)'; g.fillRect(a.left,a.top,Math.max(0,x-a.left),a.bottom-a.top); // completed
+  g.strokeStyle='#ff2d55'; g.lineWidth=2; g.beginPath(); g.moveTo(x,a.top); g.lineTo(x,a.bottom); g.stroke();
+  g.fillStyle='#ff2d55'; g.beginPath(); g.arc(x,a.top+6,4.5,0,7); g.fill();
+  g.restore();
+}};
 const elevChart=new Chart(ctx,{type:'line',
  data:{datasets:[
   {data:prof,borderColor:'#ff6a00',borderWidth:1.4,fill:true,
@@ -662,7 +713,7 @@ const elevChart=new Chart(ctx,{type:'line',
   plugins:{legend:{display:false},
    tooltip:{callbacks:{title:i=>i[0].raw.n?i[0].raw.n:`${i[0].parsed.x.toFixed(0)} km`,
      label:i=>{if(i.raw&&i.raw.tun){const l=[`🚇 ${i.raw.lenstr} · ${i.raw.road}`];if(i.raw.lit===0)l.push('unlit');return l;}const g=i.raw&&i.raw.g; return g!=null?[`${Math.round(i.parsed.y)} m elevation`,`↑ ${g.toLocaleString()} m total climb`]:`${Math.round(i.parsed.y)} m`;}}}}}
-});
+,plugins:[raceLinePlugin]});
 
 // ---------- LINK PROFILE HOVER -> MAP MARKER ----------
 let hoverMarker=null;
@@ -738,7 +789,7 @@ function recompute(){
   document.getElementById('movinfo').innerHTML=
     `Moving ${fmtDur(movingH)} · <b style="color:#cda8ff">${nNaps} nap${nNaps!=1?'s':''} × ${napLen}h = ${fmtDur(totalSleep)} sleep</b> (~${per24.toFixed(1)} h per 24h) · resupply ${fmtDur(baseStops)} · avg moving ${(DATA.totalKm/movingH).toFixed(1)} km/h`;
   let tb=document.getElementById('pacebody');tb.innerHTML='';
-  let cumStop=0, ferryArr=null;
+  let cumStop=0, ferryArr=null; const _planEta=[];
   DATA.wpts.forEach(w=>{
     const elapsed=movingH*(w.km+w.cumGain*C)/totalEffort+cumStop;
     const eta=new Date(start.getTime()+elapsed*3600*1000);
@@ -751,7 +802,8 @@ function recompute(){
     else if(dow===6){openTxt=(hr>=8&&hr<18)?'<span class="open">open (Sat, short hrs)</span>':'<span class="closed">shut → 24h fuel/unmanned</span>';}
     else {openTxt=(hr>=8&&hr<22)?'<span class="open">shops open</span>':'<span class="closed">shut → 24h fuel/unmanned</span>';}
     const badge=nap?` <span class="napbadge">💤 SLEEP ${napLen}h</span>`:'';
-    const tr=document.createElement('tr'); if(nap)tr.className='sleeprow';
+    _planEta.push({km:w.km,h:elapsed});
+    const tr=document.createElement('tr'); tr.dataset.km=w.km; if(nap)tr.className='sleeprow';
     tr.innerHTML=`<td><b>${fmtKm(w.km)}</b></td>
       <td>${w.name}${badge}<br><small class="mut">${w.desc}</small></td>
       <td>+${w.cumGain}</td>
@@ -760,6 +812,7 @@ function recompute(){
     tb.appendChild(tr);
     cumStop+=(stopMin[w.type]||0)/60+(nap?napLen:0);
   });
+  window.planEta=_planEta;
   updateFerry(ferryArr);
   const eta=new Date(start.getTime()+target*3600*1000);
   document.getElementById('bigtarget').textContent=(target%1)?target.toFixed(1):target;
@@ -795,6 +848,114 @@ window.addEventListener('hashchange',function(){
   const h=(location.hash||'').replace('#','');
   if(TAB_NAMES.includes(h)) showTab(h);
 });
+
+// ================= RACING MODE =================
+let MODE='plan', raceMarker=null;
+const $=id=>document.getElementById(id);
+function planElapsedAt(km){ // interpolate the plan's ETA curve (hours since start) at any km
+  const e=window.planEta; if(!e||!e.length)return null;
+  if(km<=e[0].km)return e[0].h*(e[0].km?km/e[0].km:1);
+  for(let i=1;i<e.length;i++){ if(km<=e[i].km){const a=e[i-1],b=e[i],f=(b.km-a.km)?(km-a.km)/(b.km-a.km):0; return a.h+(b.h-a.h)*f;} }
+  return e[e.length-1].h;
+}
+function openLabel(d,name){ // is a shop open at clock-time d? (Sunday-aware, mirrors the schedule)
+  const hr=d.getHours(),dow=d.getDay();
+  if(name&&name.indexOf('Otta')>=0)return '<span class="open">✅ 24h manned</span>';
+  if(dow===0)return '<span class="closed">Sun — groceries shut · fuel/Joker only</span>';
+  if(dow===6)return (hr>=8&&hr<18)?'<span class="open">open (Sat, short hrs)</span>':'<span class="closed">shut — 24h fuel/unmanned</span>';
+  return (hr>=8&&hr<22)?'<span class="open">open</span>':'<span class="closed">shut — 24h fuel/unmanned</span>';
+}
+function setRaceMarker(km){
+  const p=routeAtKm(km), ll=[p[0],p[1]];
+  if(!raceMarker){
+    raceMarker=L.circleMarker(ll,{radius:11,color:'#fff',weight:3,fillColor:'#ff2d55',fillOpacity:1,className:'racemk',pane:'markerPane'}).addTo(map);
+    raceMarker.bindTooltip('',{permanent:true,direction:'top',className:'hovertip',offset:[0,-8]});
+  } else raceMarker.setLatLng(ll);
+  raceMarker.setTooltipContent(`📍 ${Math.round(km)} km · ${p[2]} m`);
+  raceMarker.bringToFront();
+  if(!map.getBounds().pad(-0.15).contains(ll)) map.panTo(ll,{animate:true,duration:.5});
+}
+function clearRaceMarker(){ if(raceMarker){map.removeLayer(raceMarker);raceMarker=null;} }
+function aheadCard(tag,name,detail){ return `<div class="aheadcard"><div class="ah">${tag}</div><div class="an">${name}</div><div class="ad">${detail||''}</div></div>`; }
+function raceUpdate(){
+  const start=new Date($('start').value);
+  let km=Math.max(0,Math.min(DATA.totalKm,parseFloat($('raceKm').value)||0));
+  const now=new Date(), elapsedH=(now-start)/3600000;
+  window.raceLineKm=km; elevChart.update('none'); setRaceMarker(km);
+  // schedule table: grey passed rows, outline the next stop
+  let nextMarked=false;
+  document.querySelectorAll('#pacebody tr').forEach(tr=>{
+    const k=parseFloat(tr.dataset.km), passed=k<=km+0.01;
+    tr.classList.toggle('passed',passed);
+    tr.classList.toggle('nextstop',!passed&&!nextMarked);
+    if(!passed&&!nextMarked)nextMarked=true;
+  });
+  const S=$('raceStatus'), A=$('raceAhead');
+  if(elapsedH<0){ S.innerHTML=`<div style="grid-column:1/-1"><div class="bigstat">⏳ Race hasn't started</div><div class="k">Starts ${fmtClock(start)} — in ${fmtDur(-elapsedH)}</div></div>`; A.innerHTML=''; return; }
+  const gain=nearestGain(km), effortDone=km+gain*C, pct=km/DATA.totalKm*100;
+  const remKm=DATA.totalKm-km, remGain=DATA.totalGain-gain;
+  let cards=[`<div class="rstat"><div class="v">${fmtDur(elapsedH)}</div><div class="k">elapsed · now ${fmtClock(now)}</div></div>`,
+    `<div class="rstat"><div class="v">${fmtKm(km)} km <span style="font-size:13px;color:var(--mut)">/ ${DATA.totalKm}</span></div><div class="k">${pct.toFixed(0)}% done · ${routeAtKm(km)[2]} m</div></div>`];
+  if(km>=DATA.totalKm){
+    cards.push(`<div class="rstat"><div class="v" style="color:var(--green)">🏁 Finished!</div><div class="k">total ${fmtDur(elapsedH)} · avg ${(km/elapsedH).toFixed(1)} km/h</div></div>`);
+    S.innerHTML=cards.join(''); A.innerHTML=''; return;
+  }
+  if(elapsedH<0.15||effortDone<=0){
+    cards.push(`<div class="rstat" style="grid-column:span 2"><div class="v">—</div><div class="k">enter your km once you're rolling to see pace & projection</div></div>`);
+    S.innerHTML=cards.join('');
+  } else {
+    const rate=effortDone/elapsedH, projTotalH=totalEffort/rate;
+    const projFinish=new Date(start.getTime()+projTotalH*3600000), avg=km/elapsedH;
+    const planH=planElapsedAt(km), delta=planH!=null?elapsedH-planH:null;
+    let deltaHtml='';
+    if(delta!=null){ const ahead=delta<0; deltaHtml=`<div class="rstat"><div class="v ${ahead?'rdelta-ahead':'rdelta-behind'}">${ahead?'▲ '+fmtDur(-delta)+' ahead':'▼ '+fmtDur(delta)+' behind'}</div><div class="k">vs your ${$('target').value}h plan</div></div>`; }
+    cards.push(`<div class="rstat"><div class="v">${avg.toFixed(1)} km/h</div><div class="k">avg overall (incl. stops)</div></div>`);
+    cards.push(`<div class="rstat"><div class="v">${fmtClock(projFinish)}</div><div class="k">projected finish · ${fmtDur(projTotalH)} total</div></div>`);
+    if(deltaHtml)cards.push(deltaHtml);
+    cards.push(`<div class="rstat"><div class="v">${fmtKm(remKm)} km</div><div class="k">to go · +${remGain.toLocaleString()} m climb left</div></div>`);
+    S.innerHTML=cards.join('');
+  }
+  // ----- AHEAD OF YOU -----
+  const rate=(elapsedH>=0.15&&effortDone>0)?effortDone/elapsedH:null;
+  const etaAt=k=>rate?new Date(start.getTime()+((k+nearestGain(k)*C)/rate)*3600000):null;
+  const dist=k=>fmtKm(k-km)+' km';
+  const nextW=pred=>DATA.wpts.find(w=>w.km>km+0.05&&pred(w));
+  let ah=[];
+  const rs=nextW(w=>w.type==='resupply');
+  if(rs){const e=etaAt(rs.km); ah.push(aheadCard('🛒 Next resupply',`${rs.name} · ${dist(rs.km)}`,(e?`ETA ${fmtClock(e)} · `:'')+(e?openLabel(e,rs.name):'')));}
+  const tu=TUNNELS.find(t=>t[0]>km+0.05);
+  if(tu){const long=tu[1]>=1000,unlit=tu[4]===0; ah.push(aheadCard('🚇 Next tunnel',`${tu[2]||'Tunnel'} · ${dist(tu[0])}`,`${tu[1]>=1000?(tu[1]/1000).toFixed(1)+' km':tu[1]+' m'} · ${tu[3]}${long?' · ⚠️ lights on':''}${unlit?' · ⚠️ unlit':''}`));}
+  const pass=nextW(w=>w.type==='warning');
+  if(pass){ah.push(aheadCard('⛰️ Next high pass',`${pass.name} · ${dist(pass.km)}`,'exposed — full kit, no bivy'));}
+  const ferryKm=(DATA.wpts.find(w=>w.name.indexOf('Stranda')>=0)||{}).km;
+  if(ferryKm&&km<ferryKm-0.05){const e=etaAt(ferryKm); ah.push(aheadCard('⛴️ Liabygda ferry',`${dist(ferryKm)} to the quay`,e?`projected arrival ${fmtClock(e)} — see Ferry tab for the sailing`:'see Ferry tab'));}
+  const sl=nextW(isSleepSpot);
+  if(sl){ah.push(aheadCard('💤 Next safe sleep town',`${sl.name} · ${dist(sl.km)}`,'low & sheltered'));}
+  A.innerHTML=ah.join('');
+}
+function setMode(m){
+  MODE=m;
+  $('modePlan').classList.toggle('active',m==='plan');
+  $('modeRace').classList.toggle('active',m==='race');
+  $('planView').style.display=m==='plan'?'':'none';
+  $('raceView').style.display=m==='race'?'':'none';
+  try{localStorage.setItem('bm_mode',m);}catch(e){}
+  if(m==='race'){ recompute(); raceUpdate(); }
+  else { window.raceLineKm=null; elevChart.update('none'); clearRaceMarker();
+    document.querySelectorAll('#pacebody tr').forEach(tr=>tr.classList.remove('passed','nextstop')); }
+}
+(function(){
+  const rk=$('raceKm'), rs=$('raceKmSlider');
+  const sync=(v,fromSlider)=>{ v=Math.max(0,Math.min(DATA.totalKm,Math.round(v)||0));
+    rk.value=v; rs.value=v; try{localStorage.setItem('bm_raceKm',v);}catch(e){} if(MODE==='race')raceUpdate(); };
+  rs.addEventListener('input',()=>sync(parseFloat(rs.value),true));
+  rk.addEventListener('input',()=>sync(parseFloat(rk.value),false));
+  let saved=0; try{saved=parseFloat(localStorage.getItem('bm_raceKm'))||0;}catch(e){}
+  rk.value=saved; rs.value=saved;
+  let mode='plan'; try{mode=localStorage.getItem('bm_mode')||'plan';}catch(e){}
+  setMode(mode);
+  setInterval(()=>{ if(MODE==='race')raceUpdate(); },30000); // keep elapsed/projection live
+})();
 </script>
 </div>
 </body></html>
