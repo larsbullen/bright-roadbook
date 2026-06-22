@@ -38,7 +38,7 @@ details.callout summary::after{content:' ▾';color:var(--mut)}
 details.callout[open] summary::after{content:' ▴'}
 details.callout[open] summary{margin-bottom:10px}
 .warnbox{background:linear-gradient(135deg,#2b1c20,#1a2230);border:1px solid #5a2f37;border-left:4px solid var(--red);border-radius:12px;padding:16px 20px;margin:14px 0}
-table{width:100%;border-collapse:collapse;font-size:14px}
+table{width:100%;min-width:620px;border-collapse:collapse;font-size:14px}
 th,td{padding:9px 10px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
 th{color:var(--mut);font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.4px;position:sticky;top:0;background:var(--panel)}
 tr:hover td{background:#1e2836}
@@ -52,7 +52,7 @@ tr:hover td{background:#1e2836}
 .preset{background:var(--panel2);border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:8px 14px;cursor:pointer;font-size:13px}
 .preset:hover{border-color:var(--blue)}
 .open{color:var(--green);font-weight:600}.closed{color:var(--amber)}
-.tablewrap{overflow:auto;max-height:560px;border:1px solid var(--line);border-radius:12px}
+.tablewrap{overflow:auto;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;max-height:560px;border:1px solid var(--line);border-radius:12px}
 .gradbar{height:7px;border-radius:4px;background:var(--line);position:relative;margin-top:3px;overflow:hidden}
 .gradbar>i{position:absolute;left:0;top:0;bottom:0;border-radius:4px}
 small.mut{color:var(--mut)}
