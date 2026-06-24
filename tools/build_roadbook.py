@@ -203,7 +203,8 @@ def query_shops(pts, cum_m, snap, cfg):
            'nwr(around:%d,{C})["shop"~"bicycle|sports"];'           # bike repair / sports retailers
            'nwr(around:%d,{C})["service:bicycle:repair"="yes"];'
            'nwr(around:%d,{C})["amenity"="drinking_water"];'        # 💧 water
-           'nwr(around:%d,{C})["man_made"="water_tap"]["drinking_water"="yes"];'
+           'nwr(around:%d,{C})["man_made"="water_tap"]["drinking_water"!="no"];'
+           'nwr(around:%d,{C})["amenity"="water_point"]["drinking_water"="yes"];'
            'nwr(around:%d,{C})["amenity"="toilets"];'               # 🚻 toilets
            'nwr(around:%d,{C})["tourism"~"camp_site|caravan_site"];')  # ⛺ camping
     r = cfg["shop_overpass_radius_m"]; rb = cfg.get("bike_overpass_radius_m", 4500)
@@ -211,7 +212,7 @@ def query_shops(pts, cum_m, snap, cfg):
     for s in range(0, len(anchors), CHUNK):
         seg = anchors[s:s+CHUNK+1]
         coords = ",".join("%.5f,%.5f" % (la, lo) for la, lo, *_ in seg)
-        q = "[out:json][timeout:150];(" + flt.replace("{C}", coords) % (r, r, r, rb, rb, rw, rw, rw, rc) + ");out tags center;"
+        q = "[out:json][timeout:150];(" + flt.replace("{C}", coords) % (r, r, r, rb, rb, rw, rw, rw, rw, rc) + ");out tags center;"
         for e in overpass(q)["elements"]:
             seen[(e["type"], e["id"])] = e
         time.sleep(3)
@@ -224,7 +225,7 @@ def query_shops(pts, cum_m, snap, cfg):
         shop = tg.get("shop", ""); amen = tg.get("amenity", ""); tour = tg.get("tourism", "")
         if amen == "fuel": cat = "f"
         elif amen == "fast_food": cat = "h"
-        elif amen == "drinking_water" or tg.get("man_made") == "water_tap": cat = "w"
+        elif amen in ("drinking_water", "water_point") or tg.get("man_made") == "water_tap": cat = "w"
         elif amen == "toilets": cat = "t"
         elif tour in ("camp_site", "caravan_site"): cat = "c"
         elif shop in ("bicycle", "sports") or tg.get("service:bicycle:repair") == "yes": cat = "b"
