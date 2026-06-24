@@ -54,13 +54,13 @@
  "shop_flags": [
   {
    "match": "Coop Prix Bruvoll",
-   "flag": "unmanned",
-   "note": "ü unmanned døgnåpent (Coop app + card), closed Sun"
+   "hours": "Mo-Fr 10:00-18:00 manned (24h self-service = Norwegian BankID only)",
+   "note": "OSM tags it 24h, but that's the døgnåpent self-service (Coop app + Norwegian BankID) — useless to foreign riders. Manned Mo-Fr 10-18, Sat to 16, closed Sun. Override hours so a rebuild doesn't re-import the 24h tag."
   },
   {
    "match": "Coop Prix Bøverdalen",
-   "flag": "unmanned",
-   "note": "ü unmanned døgnåpent (Coop app + card), closed Sun"
+   "hours": "Mo-Fr 10:00-18:00 manned (24h self-service = Norwegian BankID only)",
+   "note": "OSM tags it 24h, but that's the døgnåpent self-service (Coop app + Norwegian BankID) — useless to foreign riders. Manned Mo-Fr 10-18, Sat to 16, closed Sun. Override hours so a rebuild doesn't re-import the 24h tag."
   }
  ],
  "detour_towns": [

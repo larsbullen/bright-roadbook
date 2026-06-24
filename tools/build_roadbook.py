@@ -241,6 +241,8 @@ def merge_curated_shops(shoplist, curated):
             if key.lower() in row[4].lower():
                 if f.get("flag") == "unmanned" and "ⓤ" not in row[4]:
                     row[4] = "ⓤ " + row[4]
+                if f.get("hours") is not None:
+                    row[5] = f["hours"]  # override OSM hours (e.g. self-service 24h that needs Norwegian BankID)
     return shoplist
 
 def js_const(name, arr):
