@@ -29,9 +29,9 @@
    "source": "manual"
   },
   {
-   "//": "Rattana Thaimat takeaway, Åndalsnes — NOT in OSM, local knowledge. Placed at town centre on-route; verify lat/lon + hours.",
-   "lat": 62.5676,
-   "lon": 7.6874,
+   "//": "Rattana Thaimat takeaway, Åndalsnes — NOT in OSM, local knowledge. Address Gamle Romsdalsvegen 5, 6300 Åndalsnes; lat/lon verified from Google Maps pin (km 378.6, ~95 m off route).",
+   "lat": 62.5677332,
+   "lon": 7.6874219,
    "cat": "h",
    "type": "Thai takeaway",
    "name": "Rattana Thaimat",
