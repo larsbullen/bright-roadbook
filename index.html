@@ -75,6 +75,7 @@ a{color:var(--blue)}
 .leaflet-tooltip.hovertip:before{border-top-color:#ff6a00}
 path.hovermk{filter:drop-shadow(0 0 5px rgba(255,106,0,.9))}
 .napbadge{display:inline-block;background:#2e2147;color:#cda8ff;border:1px solid #5a3f8a;border-radius:20px;padding:1px 9px;font-size:11px;font-weight:800;margin-left:6px;white-space:nowrap}
+.detourpill{display:inline-block;background:#4a1717;color:#ff9b9b;border:1px solid #b03a3a;border-radius:20px;padding:1px 9px;font-size:11px;font-weight:800;white-space:nowrap}
 .shopmk{cursor:pointer}.shopmk:hover{stroke:#fff;stroke-width:4}
 .shopfilter{font-size:13px}.shopfilter.active{border-color:var(--blue);background:#15324e;color:#fff;font-weight:700}
 .tabbar{position:sticky;top:0;z-index:600;display:flex;gap:6px;overflow-x:auto;-webkit-overflow-scrolling:touch;
@@ -498,7 +499,7 @@ Sognefjellet (km 692, 1421 m · ~40 km no services) · Valdresflye (km 860, 1390
 <section class="tabpane" data-pane="supplies">
 <h2>🛒 Resupply — verified shops &amp; gaps (OpenStreetMap)</h2>
 <p class="note">Every shop &amp; fuel station within 3.5 km of the GPX, pulled from OpenStreetMap and matched to route-km. Hours change — re-check before July — but this is the real on-the-ground picture.</p>
-<div class="warnbox"><b>⚠️ Three "towns" the route does NOT enter</b> (marker is on the line, but the supermarkets are a detour): <b>Stryn</b> ~9 km W (use Joker Hjelledalen instead) · <b>Folldal</b> ~6.5 km N · <b>Dombås</b> ~10 km W. Don't bank on their shops.</div>
+<div class="warnbox"><b>⚠️ Three "towns" the route does NOT enter</b> (marker is on the line, but the supermarkets are a detour): <b>Stryn</b> <span class="detourpill">↩ 9+9 km detour</span> W (use Joker Hjelledalen instead) · <b>Folldal</b> <span class="detourpill">↩ 6.5+6.5 km detour</span> N · <b>Dombås</b> <span class="detourpill">↩ 10+10 km detour</span> W. Don't bank on their shops.</div>
 <p class="note" style="margin-top:14px"><b>Longest on-route service gaps</b> — nothing open in between, so carry food &amp; water across these:</p>
 <div class="tablewrap"><table id="gapTable">
 <thead><tr><th>Gap</th><th>km</th><th>Length</th><th>Last shop before → first after</th></tr></thead>
@@ -566,7 +567,9 @@ function renderShopList(cat){
     const km=s[0],offm=s[1],c=s[2],typ=s[3],name=s[4],hrs=s[5],town=s[6];
     const fuelFood = c==='f' && /esso|shell/i.test(name); // Esso/Shell sell hot food → also show under 🍔
     if(cat!=='all' && c!==cat && !(cat==='h' && fuelFood)) return;
+    const oneway = offm/1000;
     const det = offm<=350 ? '<span class="open">on route</span>'
+              : offm>=4000 ? '<span class="detourpill">↩ '+Math.round(oneway)+'+'+Math.round(oneway)+' km detour</span>'
               : '~'+(offm*2/1000).toFixed(1)+' km detour';
     const icon = fuelFood ? '⛽🍔' : (c==='f'?'⛽':c==='g'?'🛒':c==='h'?'🍔':c==='b'?'🔧':'•');
     const tr=document.createElement('tr'); tr.dataset.passkm=km;
