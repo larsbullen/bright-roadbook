@@ -38,6 +38,17 @@
    "hours": "",
    "town": "Åndalsnes",
    "source": "manual"
+  },
+  {
+   "//": "Pizza Viva Napoli Hellesylt AS, Hellesyltvegen 33, 6218 Hellesylt — local knowledge. lat/lon geocoded from address (km 484.8, ~14 m off route).",
+   "lat": 62.0856770,
+   "lon": 6.8683106,
+   "cat": "h",
+   "type": "Pizza",
+   "name": "Pizza Viva Napoli",
+   "hours": "Mo-Su 11:00-22:00",
+   "town": "Hellesylt",
+   "source": "manual"
   }
  ],
  "shop_flags": [
