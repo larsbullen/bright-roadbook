@@ -27,6 +27,17 @@
    "hours": "Mo-Su ~11:00-21:00",
    "town": "Oppdal",
    "source": "manual"
+  },
+  {
+   "//": "Rattana Thaimat takeaway, Åndalsnes — NOT in OSM, local knowledge. Placed at town centre on-route; verify lat/lon + hours.",
+   "lat": 62.5676,
+   "lon": 7.6874,
+   "cat": "h",
+   "type": "Thai takeaway",
+   "name": "Rattana Thaimat",
+   "hours": "",
+   "town": "Åndalsnes",
+   "source": "manual"
   }
  ],
  "shop_flags": [
