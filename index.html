@@ -819,10 +819,13 @@ function recompute(){
     else if(dow===6){openTxt=(hr>=8&&hr<18)?'<span class="open">open (Sat, short hrs)</span>':'<span class="closed">shut → 24h fuel</span>';}
     else {openTxt=(hr>=8&&hr<22)?'<span class="open">shops open</span>':'<span class="closed">shut → 24h fuel</span>';}
     const badge=nap?` <span class="napbadge">💤 SLEEP ${napLen}h</span>`:'';
+    let dispName=w.name, detourPill=''; // detour towns embed "N km W/N" in the name → red pill
+    const dm=w.name.match(/\s*[—-]?\s*(\d+(?:\.\d+)?)\s*km\s*([NSEW])\b/);
+    if(dm){const d=dm[1],dir=dm[2];detourPill=` <span class="detourpill">↩ ${d}+${d} km detour ${dir}</span>`;dispName=w.name.slice(0,dm.index).replace(/[—-]\s*$/,'').trim();}
     _planEta.push({km:w.km,h:elapsed});
     const tr=document.createElement('tr'); tr.dataset.km=w.km; tr.dataset.passkm=w.km; if(nap)tr.className='sleeprow';
     tr.innerHTML=`<td><b>${fmtKm(w.km)}</b></td>
-      <td>${w.name}${badge}<br><small class="mut">${w.desc}</small></td>
+      <td>${dispName}${detourPill}${badge}<br><small class="mut">${w.desc}</small></td>
       <td>+${w.cumGain}</td>
       <td><b>${fmtClock(eta)}</b><br><small class="mut">${fmtDur(elapsed)} elapsed</small></td>
       <td>${openTxt}</td>`;
