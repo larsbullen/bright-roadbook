@@ -201,12 +201,17 @@ def query_shops(pts, cum_m, snap, cfg):
            'nwr(around:%d,{C})["amenity"="fuel"];'
            'nwr(around:%d,{C})["amenity"="fast_food"];'
            'nwr(around:%d,{C})["shop"~"bicycle|sports"];'           # bike repair / sports retailers
-           'nwr(around:%d,{C})["service:bicycle:repair"="yes"];')
+           'nwr(around:%d,{C})["service:bicycle:repair"="yes"];'
+           'nwr(around:%d,{C})["amenity"="drinking_water"];'        # 💧 water
+           'nwr(around:%d,{C})["man_made"="water_tap"]["drinking_water"="yes"];'
+           'nwr(around:%d,{C})["amenity"="toilets"];'               # 🚻 toilets
+           'nwr(around:%d,{C})["tourism"~"camp_site|caravan_site"];')  # ⛺ camping
     r = cfg["shop_overpass_radius_m"]; rb = cfg.get("bike_overpass_radius_m", 4500)
+    rw = cfg.get("amenity_overpass_radius_m", 350); rc = cfg.get("camp_overpass_radius_m", 3000)
     for s in range(0, len(anchors), CHUNK):
         seg = anchors[s:s+CHUNK+1]
         coords = ",".join("%.5f,%.5f" % (la, lo) for la, lo, *_ in seg)
-        q = "[out:json][timeout:150];(" + flt.replace("{C}", coords) % (r, r, r, rb, rb) + ");out tags center;"
+        q = "[out:json][timeout:150];(" + flt.replace("{C}", coords) % (r, r, r, rb, rb, rw, rw, rw, rc) + ");out tags center;"
         for e in overpass(q)["elements"]:
             seen[(e["type"], e["id"])] = e
         time.sleep(3)
@@ -216,15 +221,23 @@ def query_shops(pts, cum_m, snap, cfg):
         if not c.get("lat"): continue
         km, off = snap(c["lat"], c["lon"])
         tg = e.get("tags", {})
-        shop = tg.get("shop", ""); amen = tg.get("amenity", "")
+        shop = tg.get("shop", ""); amen = tg.get("amenity", ""); tour = tg.get("tourism", "")
         if amen == "fuel": cat = "f"
         elif amen == "fast_food": cat = "h"
+        elif amen == "drinking_water" or tg.get("man_made") == "water_tap": cat = "w"
+        elif amen == "toilets": cat = "t"
+        elif tour in ("camp_site", "caravan_site"): cat = "c"
         elif shop in ("bicycle", "sports") or tg.get("service:bicycle:repair") == "yes": cat = "b"
         elif shop in ("supermarket", "convenience", "general"): cat = "g"
         else: cat = "o"
-        typ = {"f": "Fuel", "h": "Hot food", "g": "Grocery", "b": "Bike/sport", "o": "Shop"}[cat]
-        name = tg.get("name", "?")
-        hrs = tg.get("opening_hours", "")
+        # water/toilets must be ~on route; camping allowed a few km off
+        if cat in ("w", "t") and off > rw: continue
+        if cat == "c" and off > rc: continue
+        typ = {"f": "Fuel", "h": "Hot food", "g": "Grocery", "b": "Bike/sport", "o": "Shop",
+               "w": "Drinking water", "t": "Toilet", "c": "Camp site"}[cat]
+        if cat in ("t", "c") and tg.get("fee") == "yes": typ += " (fee)"
+        name = tg.get("name", "") or {"w": "Drinking water", "t": "Public toilet", "c": "Camp site"}.get(cat, "?")
+        hrs = "" if cat == "c" else tg.get("opening_hours", "")
         rows.append([round(km), round(off), cat, typ, name, hrs, tg.get("addr:city", "") or tg.get("addr:place", "")])
     rows.sort(key=lambda r: (r[0], r[1]))
     return rows
