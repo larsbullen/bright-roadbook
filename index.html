@@ -484,12 +484,7 @@ Sognefjellet (km 692, 1421 m · ~40 km no services) · Valdresflye (km 860, 1390
 <h2>🛖 DNT mountain huts &amp; lodges</h2>
 <p class="note">Every DNT-network hut within ~4 km of the route, north→south. <b>🟢 Manned</b> lodges sell hot food &amp; beds to anyone in summer season; <b>🔑 self-service / unmanned</b> huts need a DNT membership + the standard DNT key. Plan ETA tracks the slider above. Hours &amp; season change — confirm on ut.no before relying.</p>
 <div class="warnbox">🔑 <b>Self-service &amp; unmanned huts:</b> you must be a <b>DNT member carrying the standard DNT key</b> (order ahead from dnt.no) and pay for pantry food — without a key these are <b>emergency shelter only</b>. The 🟢 manned lodges have no such requirement in season.</div>
-<div style="display:flex;flex-wrap:wrap;gap:6px;margin:12px 0 8px">
-<button class="preset hyttefilter active" onclick="filterHytte('all',this)">All</button>
-<button class="preset hyttefilter" onclick="filterHytte('m',this)">🟢 Manned</button>
-<button class="preset hyttefilter" onclick="filterHytte('u',this)">🔑 Self-service</button>
-<span class="mut" id="hytteCount" style="align-self:center;font-size:12px"></span>
-</div>
+<div style="margin:12px 0 8px"><span class="mut" id="hytteCount" style="font-size:12px"></span></div>
 <div class="tablewrap" style="max-height:600px">
 <table><thead><tr><th>km</th><th>Hut</th><th>Status</th><th>Operator</th><th>On route / detour</th><th>Plan ETA</th></tr></thead>
 <tbody id="hytteListBody"></tbody></table></div>
@@ -665,7 +660,6 @@ function renderHytteList(f){
   });
   document.getElementById('hytteCount').textContent=shown+' shown';
 }
-function filterHytte(f,el){document.querySelectorAll('.hyttefilter').forEach(x=>x.classList.remove('active'));el.classList.add('active');renderHytteList(f);}
 function toggleFerry(){
   const p=document.getElementById('ferryPanel');
   p.style.display=(p.style.display==='none'||!p.style.display)?'block':'none';
