@@ -1,490 +1,525 @@
 {
- "_README": "Hand-curated overlay merged by build_roadbook.py on top of fresh OSM/Overpass + GPX data. Edit this, not the generated JS. Items here are NOT in the GPX and often NOT in OSM, so they must survive a route swap.",
- "config": {
-  "downsample_m": 300,
-  "//downsample_m": "target spacing of DATA.route points (display + km lookup)",
-  "ele_smooth_window": 6,
-  "//ele": "moving-average half-window over full-res GPX ele; reproduces totalGain 17857 / maxEle 1421",
-  "climb_min_gain_m": 180,
-  "//climb": "min net gain for a 'sustained climb' row (live page ~23; partly editorial, review after swap)",
-  "climb_merge_dip_m": 60,
-  "//dip": "a descent bigger than this splits/ends a climb",
-  "shop_overpass_radius_m": 3500,
-  "//shop": "SHOPLIST = shops/fuel/food within this of the line",
-  "bike_overpass_radius_m": 4500,
-  "//bike": "bike/sports shops (cat 'b', 🔧) searched a bit wider — riders detour for a repair",
-  "tunnel_overpass_radius_m": 30,
-  "tunnel_min_len_m": 40
- },
- "manual_shops": [
-  {
-   "//": "BK Oppdal — only chain on route; NOT in OSM, added from local knowledge. VERIFY lat/lon.",
-   "lat": 62.5957,
-   "lon": 9.6905,
-   "cat": "h",
-   "type": "Burger King",
-   "name": "Burger King Oppdal",
-   "hours": "Mo-Su ~11:00-21:00",
-   "town": "Oppdal",
-   "source": "manual"
+  "_README": "Hand-curated overlay merged by build_roadbook.py on top of fresh OSM/Overpass + GPX data. Edit this, not the generated JS. Items here are NOT in the GPX and often NOT in OSM, so they must survive a route swap.",
+  "config": {
+    "downsample_m": 300,
+    "//downsample_m": "target spacing of DATA.route points (display + km lookup)",
+    "ele_smooth_window": 6,
+    "//ele": "moving-average half-window over full-res GPX ele; reproduces totalGain 17857 / maxEle 1421",
+    "climb_min_gain_m": 180,
+    "//climb": "min net gain for a 'sustained climb' row (live page ~23; partly editorial, review after swap)",
+    "climb_merge_dip_m": 60,
+    "//dip": "a descent bigger than this splits/ends a climb",
+    "shop_overpass_radius_m": 3500,
+    "//shop": "SHOPLIST = shops/fuel/food within this of the line",
+    "bike_overpass_radius_m": 4500,
+    "//bike": "bike/sports shops (cat 'b', 🔧) searched a bit wider — riders detour for a repair",
+    "tunnel_overpass_radius_m": 30,
+    "tunnel_min_len_m": 40
   },
-  {
-   "//": "Rattana Thaimat takeaway, Åndalsnes — NOT in OSM, local knowledge. Address Gamle Romsdalsvegen 5, 6300 Åndalsnes; lat/lon verified from Google Maps pin (km 378.6, ~95 m off route).",
-   "lat": 62.5677332,
-   "lon": 7.6874219,
-   "cat": "h",
-   "type": "Thai takeaway",
-   "name": "Rattana Thaimat",
-   "hours": "",
-   "town": "Åndalsnes",
-   "source": "manual"
-  },
-  {
-   "//": "Pizza Viva Napoli Hellesylt AS, Hellesyltvegen 33, 6218 Hellesylt — local knowledge. lat/lon geocoded from address (km 484.8, ~14 m off route).",
-   "lat": 62.0856770,
-   "lon": 6.8683106,
-   "cat": "h",
-   "type": "Pizza",
-   "name": "Pizza Viva Napoli",
-   "hours": "Mo-Su 11:00-22:00",
-   "town": "Hellesylt",
-   "source": "manual"
-  }
- ],
- "shop_flags": [
-  {
-   "match": "Coop Prix Bruvoll",
-   "hours": "Mo-Fr 10:00-18:00 manned (24h self-service = Norwegian BankID only)",
-   "note": "OSM tags it 24h, but that's the døgnåpent self-service (Coop app + Norwegian BankID) — useless to foreign riders. Manned Mo-Fr 10-18, Sat to 16, closed Sun. Override hours so a rebuild doesn't re-import the 24h tag."
-  },
-  {
-   "match": "Coop Prix Bøverdalen",
-   "hours": "Mo-Fr 10:00-18:00 manned (24h self-service = Norwegian BankID only)",
-   "note": "OSM tags it 24h, but that's the døgnåpent self-service (Coop app + Norwegian BankID) — useless to foreign riders. Manned Mo-Fr 10-18, Sat to 16, closed Sun. Override hours so a rebuild doesn't re-import the 24h tag."
-  }
- ],
- "detour_towns": [
-  {
-   "name": "Stryn",
-   "off_km": 9,
-   "dir": "W",
-   "note": "route doesn't enter — use Joker Hjelledalen",
-   "lat": 61.911,
-   "lon": 6.722
-  },
-  {
-   "name": "Folldal",
-   "off_km": 6.5,
-   "dir": "N",
-   "note": "route doesn't enter",
-   "lat": 62.133,
-   "lon": 9.998
-  },
-  {
-   "name": "Dombås",
-   "off_km": 10,
-   "dir": "W",
-   "note": "route doesn't enter",
-   "lat": 62.075,
-   "lon": 9.128
-  }
- ],
- "ferry": {
-  "leg": "Liabygda → Stranda",
-  "operator": "Fjord1 MF Volda",
-  "road": "fv650",
-  "approx_km": 449,
-  "crossing_min": 13,
-  "free_for_cyclists": true,
-  "note": "GPX line snaps over land here (no gap) — not auto-detectable; confirmed by rider. Only ferry on route.",
-  "timetable_2026": {
-   "wd": [
-    375,
-    405,
-    435,
-    480,
-    510,
-    540,
-    570,
-    600,
-    630,
-    660,
-    690,
-    720,
-    750,
-    780,
-    810,
-    840,
-    870,
-    900,
-    930,
-    960,
-    990,
-    1020,
-    1050,
-    1080,
-    1110,
-    1140,
-    1185,
-    1245,
-    1305,
-    1365,
-    1395
-   ],
-   "sat": [
-    435,
-    480,
-    510,
-    540,
-    570,
-    600,
-    630,
-    660,
-    690,
-    720,
-    750,
-    780,
-    810,
-    840,
-    870,
-    900,
-    930,
-    990,
-    1020,
-    1050,
-    1080,
-    1140,
-    1185,
-    1245,
-    1305,
-    1365,
-    1395,
-    1425
-   ],
-   "sun": [
-    510,
-    540,
-    570,
-    600,
-    630,
-    660,
-    690,
-    720,
-    750,
-    780,
-    810,
-    840,
-    870,
-    900,
-    930,
-    960,
-    990,
-    1020,
-    1050,
-    1080,
-    1110,
-    1140,
-    1185,
-    1245,
-    1305,
-    1365,
-    1395
-   ]
-  },
-  "//detect": "after swap, confirm the route still crosses Storfjorden here; ferry km = the Stranda/Liabygda waypoint km"
- },
- "climb_names": [
-  {"//": "marquee passes — a regenerated climb whose summit is within 4 km gets this name. Approx coords; verify after swap.",
-   "name": "Aursjovegen (Sunndal wall)", "lat": 62.46, "lon": 8.30},
-  {"name": "Trollstigen", "lat": 62.456, "lon": 7.660},
-  {"name": "Strynefjellet / Grotli", "lat": 61.97, "lon": 7.47},
-  {"name": "Sognefjellet", "lat": 61.566, "lon": 8.010},
-  {"name": "Tyin / Filefjell", "lat": 61.10, "lon": 8.05},
-  {"name": "Valdresflye", "lat": 61.40, "lon": 8.97}
- ],
- "editorial_blocks": {
-  "//": "Prose with km in it — re-review after swap. Stored so nothing is silently lost.",
-  "sleep_chain": [
-   "Sunnda(210)",
-   "Åndalsnes(380)",
-   "Stranda(450)",
-   "Stryn/Strynedalen(510)",
-   "Lom(640)",
-   "Øvre Årdal(740,PRIME)",
-   "Vågåmo/Otta(930-940)",
-   "Alvdal(1080)"
+  "manual_shops": [
+    {
+      "//": "BK Oppdal — only chain on route; NOT in OSM, added from local knowledge. VERIFY lat/lon.",
+      "lat": 62.5957,
+      "lon": 9.6905,
+      "cat": "h",
+      "type": "Burger King",
+      "name": "Burger King Oppdal",
+      "hours": "Mo-Su ~11:00-21:00",
+      "town": "Oppdal",
+      "source": "manual"
+    },
+    {
+      "//": "Rattana Thaimat takeaway, Åndalsnes — NOT in OSM, local knowledge. Address Gamle Romsdalsvegen 5, 6300 Åndalsnes; lat/lon verified from Google Maps pin (km 378.6, ~95 m off route).",
+      "lat": 62.5677332,
+      "lon": 7.6874219,
+      "cat": "h",
+      "type": "Thai takeaway",
+      "name": "Rattana Thaimat",
+      "hours": "",
+      "town": "Åndalsnes",
+      "source": "manual"
+    },
+    {
+      "//": "Pizza Viva Napoli Hellesylt AS, Hellesyltvegen 33, 6218 Hellesylt — local knowledge. lat/lon geocoded from address (km 484.8, ~14 m off route).",
+      "lat": 62.085677,
+      "lon": 6.8683106,
+      "cat": "h",
+      "type": "Pizza",
+      "name": "Pizza Viva Napoli",
+      "hours": "Mo-Su 11:00-22:00",
+      "town": "Hellesylt",
+      "source": "manual"
+    },
+    {
+      "//": "Aursjøhytta DNT/KNT mountain lodge on the Aursjøvegen at the Aursjø dam — warm food for racers (local/race knowledge, staffed-summer hut not a normal shop). lat/lon from Nominatim 'Aursjøhytta (KNT)' (km 247, ~22 m off route). Seasonal Jun-Sep, staffed afternoons ~13:00+.",
+      "lat": 62.40616,
+      "lon": 8.54024,
+      "cat": "h",
+      "type": "Mountain lodge",
+      "name": "Aursjøhytta (DNT/KNT)",
+      "hours": "Summer (Jun-Sep), warm food when staffed ~13:00+",
+      "town": "Aursjøvegen",
+      "source": "manual"
+    }
   ],
-  "cold_passes": [
-   "Sognefjellet(692,1421)",
-   "Valdresflye(860,1390)",
-   "Grotli/Strynefjellet(562,1137)",
-   "Dovre/Grimsdalen(989,1170)",
-   "Tyin/Filefjell(764,1076)"
+  "shop_flags": [
+    {
+      "match": "Coop Prix Bruvoll",
+      "hours": "Mo-Fr 10:00-18:00 manned (24h self-service = Norwegian BankID only)",
+      "note": "OSM tags it 24h, but that's the døgnåpent self-service (Coop app + Norwegian BankID) — useless to foreign riders. Manned Mo-Fr 10-18, Sat to 16, closed Sun. Override hours so a rebuild doesn't re-import the 24h tag."
+    },
+    {
+      "match": "Coop Prix Bøverdalen",
+      "hours": "Mo-Fr 10:00-18:00 manned (24h self-service = Norwegian BankID only)",
+      "note": "OSM tags it 24h, but that's the døgnåpent self-service (Coop app + Norwegian BankID) — useless to foreign riders. Manned Mo-Fr 10-18, Sat to 16, closed Sun. Override hours so a rebuild doesn't re-import the 24h tag."
+    }
   ],
-  "km_above_1000m": 138
- },
- "wpts_base": [
-  {
-   "lat": 62.4094,
-   "lon": 10.9977,
-   "name": "Tolga — START/FINISH",
-   "type": "start",
-   "desc": "Small village. Coop/Joker. Start & finish.",
-   "km": 0.0,
-   "cumGain": 0
+  "detour_towns": [
+    {
+      "name": "Stryn",
+      "off_km": 9,
+      "dir": "W",
+      "note": "route doesn't enter — use Joker Hjelledalen",
+      "lat": 61.911,
+      "lon": 6.722
+    },
+    {
+      "name": "Folldal",
+      "off_km": 6.5,
+      "dir": "N",
+      "note": "route doesn't enter",
+      "lat": 62.133,
+      "lon": 9.998
+    },
+    {
+      "name": "Dombås",
+      "off_km": 10,
+      "dir": "W",
+      "note": "route doesn't enter",
+      "lat": 62.075,
+      "lon": 9.128
+    }
+  ],
+  "ferry": {
+    "leg": "Liabygda → Stranda",
+    "operator": "Fjord1 MF Volda",
+    "road": "fv650",
+    "approx_km": 449,
+    "crossing_min": 13,
+    "free_for_cyclists": true,
+    "note": "GPX line snaps over land here (no gap) — not auto-detectable; confirmed by rider. Only ferry on route.",
+    "timetable_2026": {
+      "wd": [
+        375,
+        405,
+        435,
+        480,
+        510,
+        540,
+        570,
+        600,
+        630,
+        660,
+        690,
+        720,
+        750,
+        780,
+        810,
+        840,
+        870,
+        900,
+        930,
+        960,
+        990,
+        1020,
+        1050,
+        1080,
+        1110,
+        1140,
+        1185,
+        1245,
+        1305,
+        1365,
+        1395
+      ],
+      "sat": [
+        435,
+        480,
+        510,
+        540,
+        570,
+        600,
+        630,
+        660,
+        690,
+        720,
+        750,
+        780,
+        810,
+        840,
+        870,
+        900,
+        930,
+        990,
+        1020,
+        1050,
+        1080,
+        1140,
+        1185,
+        1245,
+        1305,
+        1365,
+        1395,
+        1425
+      ],
+      "sun": [
+        510,
+        540,
+        570,
+        600,
+        630,
+        660,
+        690,
+        720,
+        750,
+        780,
+        810,
+        840,
+        870,
+        900,
+        930,
+        960,
+        990,
+        1020,
+        1050,
+        1080,
+        1110,
+        1140,
+        1185,
+        1245,
+        1305,
+        1365,
+        1395
+      ]
+    },
+    "//detect": "after swap, confirm the route still crosses Storfjorden here; ferry km = the Stranda/Liabygda waypoint km"
   },
-  {
-   "lat": 62.3668,
-   "lon": 10.6549,
-   "name": "Tynset",
-   "type": "resupply",
-   "desc": "Regional town: Rema/Coop/Kiwi; Circle K 06:30–22:00 (NOT 24h); Intersport bike service; pharmacy, hospital. Best early resupply.",
-   "km": 30.1,
-   "cumGain": 398
+  "climb_names": [
+    {
+      "//": "marquee passes — a regenerated climb whose summit is within 4 km gets this name. Approx coords; verify after swap.",
+      "name": "Aursjovegen (Sunndal wall)",
+      "lat": 62.46,
+      "lon": 8.3
+    },
+    {
+      "name": "Trollstigen",
+      "lat": 62.456,
+      "lon": 7.66
+    },
+    {
+      "name": "Strynefjellet / Grotli",
+      "lat": 61.97,
+      "lon": 7.47
+    },
+    {
+      "name": "Sognefjellet",
+      "lat": 61.566,
+      "lon": 8.01
+    },
+    {
+      "name": "Tyin / Filefjell",
+      "lat": 61.1,
+      "lon": 8.05
+    },
+    {
+      "name": "Valdresflye",
+      "lat": 61.4,
+      "lon": 8.97
+    }
+  ],
+  "editorial_blocks": {
+    "//": "Prose with km in it — re-review after swap. Stored so nothing is silently lost.",
+    "sleep_chain": [
+      "Sunnda(210)",
+      "Åndalsnes(380)",
+      "Stranda(450)",
+      "Stryn/Strynedalen(510)",
+      "Lom(640)",
+      "Øvre Årdal(740,PRIME)",
+      "Vågåmo/Otta(930-940)",
+      "Alvdal(1080)"
+    ],
+    "cold_passes": [
+      "Sognefjellet(692,1421)",
+      "Valdresflye(860,1390)",
+      "Grotli/Strynefjellet(562,1137)",
+      "Dovre/Grimsdalen(989,1170)",
+      "Tyin/Filefjell(764,1076)"
+    ],
+    "km_above_1000m": 138
   },
-  {
-   "lat": 62.5325,
-   "lon": 10.3688,
-   "name": "Kvikne",
-   "type": "store",
-   "desc": "Tiny: Joker + fuel pump. Long gap after.",
-   "km": 70.0,
-   "cumGain": 802
-  },
-  {
-   "lat": 62.6483,
-   "lon": 10.0418,
-   "name": "Berkåk / Rennebu",
-   "type": "store",
-   "desc": "On E6: Coop, Circle K/Shell 24h, hot food.",
-   "km": 100.1,
-   "cumGain": 1440
-  },
-  {
-   "lat": 62.6182,
-   "lon": 9.749,
-   "name": "Oppdal",
-   "type": "resupply",
-   "desc": "Town: Coop Extra/Mega, Rema, Kiwi; Circle K 06:00–22:00 (+24h Uno-X/automat, fuel only); sport shops w/ bike service. Last big town before Sunndalen.",
-   "km": 130.0,
-   "cumGain": 1814
-  },
-  {
-   "lat": 62.549,
-   "lon": 9.1096,
-   "name": "Gjøra",
-   "type": "store",
-   "desc": "Small Joker shop. Start of fjord descent.",
-   "km": 170.0,
-   "cumGain": 2125
-  },
-  {
-   "lat": 62.6346,
-   "lon": 8.5339,
-   "name": "Sunndalsøra",
-   "type": "resupply",
-   "desc": "Sea-level fjord town: Coop/Rema/Kiwi/Bunnpris; Circle K 07:00–23:00 (+Uno-X automat 24h); sport shop. Warm. Possible early bivy.",
-   "km": 210.1,
-   "cumGain": 2328
-  },
-  {
-   "lat": 62.45226,
-   "lon": 8.6007,
-   "name": "Aursjøvegen — 920m",
-   "type": "warning",
-   "desc": "The Sunndal wall: +899 m gravel climb out of Sunndalsøra, and the start of the 115 km Aursjøvegen/Eikesdal gap. Exposed, remote, no services — carry food and layers.",
-   "km": 236.5,
-   "cumGain": 3227
-  },
-  {
-   "lat": 62.6496,
-   "lon": 8.1153,
-   "name": "Eresfjord",
-   "type": "store",
-   "desc": "Joker + fuel. Remote.",
-   "km": 300.1,
-   "cumGain": 4171
-  },
-  {
-   "lat": 62.5587,
-   "lon": 7.6829,
-   "name": "Åndalsnes",
-   "type": "resupply",
-   "desc": "Sea-level town: Coop/Rema/Kiwi; Circle K/Esso to 24:00 (midnight); sport shops (outdoor hub), train. ~1/3 mark.",
-   "km": 379.9,
-   "cumGain": 4911
-  },
-  {
-   "lat": 62.43244,
-   "lon": 7.65737,
-   "name": "Trollstigen — 860m",
-   "type": "warning",
-   "desc": "Iconic 11-hairpin climb out of Åndalsnes, +822 m. Tourist traffic; seasonal café/fuel near the top. Exposed up high.",
-   "km": 401.4,
-   "cumGain": 5733
-  },
-  {
-   "lat": 62.3085,
-   "lon": 6.9988,
-   "name": "Stranda",
-   "type": "resupply",
-   "desc": "Town: Coop Extra/Rema/Kiwi, 24h fuel, sport shop, ferry.",
-   "km": 450.0,
-   "cumGain": 6369
-  },
-  {
-   "lat": 61.9997,
-   "lon": 7.0407,
-   "name": "Hellesylt area",
-   "type": "store",
-   "desc": "Village: Spar/Joker, fuel, ferry.",
-   "km": 500.0,
-   "cumGain": 7727
-  },
-  {
-   "lat": 61.9519,
-   "lon": 6.99,
-   "name": "Strynedalen — Stryn 9 km W",
-   "type": "resupply",
-   "desc": "Route follows Strynedalen valley (hamlets Storesunde/Meland/Fosnes); does NOT enter Stryn town — a ~9 km detour W. Stryn town has the last full supermarkets (Coop/Rema/Kiwi/Bunnpris), fuel + bike service before the high passes — worth the detour to stock up for Strynefjellet→Sognefjellet (~130 km, sparse). On-route: Joker Hjelledalen (km 537, Mo-Sa 06:00-24:00) is the real last resupply before Strynefjellet — so the Stryn detour is only needed on Sundays.",
-   "km": 510.1,
-   "cumGain": 7844
-  },
-  {
-   "lat": 61.9865,
-   "lon": 7.4905,
-   "name": "Grotli Pass — 1137m",
-   "type": "warning",
-   "desc": "High exposed pass. Grotli hotel/fuel (seasonal). Cold/windy. Full kit, not a bivy spot.",
-   "km": 561.7,
-   "cumGain": 9056
-  },
-  {
-   "lat": 61.8852,
-   "lon": 8.2642,
-   "name": "Bismo / Skjåk",
-   "type": "store",
-   "desc": "Coop Marked/Joker, fuel. Small.",
-   "km": 620.1,
-   "cumGain": 9293
-  },
-  {
-   "lat": 61.8285,
-   "lon": 8.5371,
-   "name": "Lom",
-   "type": "resupply",
-   "desc": "Outdoor hub, 392m: Coop, Joker, famous bakery; Circle K 07:00–22:00 (Sun 09:00); bike service. LAST town before Sognefjellet.",
-   "km": 640.0,
-   "cumGain": 9416
-  },
-  {
-   "lat": 61.5661,
-   "lon": 8.0079,
-   "name": "Sognefjellet — 1421m",
-   "type": "warning",
-   "desc": "ROUTE HIGH POINT, Europe's highest pass road. Snow walls in July, near-freezing, ~40km no services. Cross rested & fully dressed. DO NOT bivy.",
-   "km": 691.6,
-   "cumGain": 10474
-  },
-  {
-   "lat": 61.3112,
-   "lon": 7.787,
-   "name": "Øvre Årdal",
-   "type": "resupply",
-   "desc": "Sea-level fjord town (12m), warmest & most sheltered mid-race spot. Coop/Rema/Spar, 24h fuel, sport shop. After Sognefjellet, before Valdresflye. RECOMMENDED bivy.",
-   "km": 740.0,
-   "cumGain": 11162
-  },
-  {
-   "lat": 61.2652,
-   "lon": 8.0103,
-   "name": "Tyin / Filefjell — 1076m",
-   "type": "warning",
-   "desc": "Major +1056m climb straight off sea-level Øvre Årdal. Exposed high section, cold/windy, no services. Full kit, not a bivy spot.",
-   "km": 764.0,
-   "cumGain": 12218
-  },
-  {
-   "lat": 61.1681,
-   "lon": 8.4475,
-   "name": "Vang i Valdres",
-   "type": "store",
-   "desc": "Coop/Joker/Spar, fuel, 470m.",
-   "km": 800.1,
-   "cumGain": 12369
-  },
-  {
-   "lat": 61.2485,
-   "lon": 8.9058,
-   "name": "Beitostølen",
-   "type": "resupply",
-   "desc": "Resort, 893m: Coop/Spar, fuel, bike rental+service. Last services before Valdresflye.",
-   "km": 840.0,
-   "cumGain": 13542
-  },
-  {
-   "lat": 61.3887,
-   "lon": 8.8106,
-   "name": "Valdresflye — 1390m",
-   "type": "warning",
-   "desc": "Exposed high plateau, 2nd highest point. Cold/windy, no services. Full kit. DO NOT bivy.",
-   "km": 859.7,
-   "cumGain": 14150
-  },
-  {
-   "lat": 61.5457,
-   "lon": 8.9075,
-   "name": "Gjendesheim / Maurvangen",
-   "type": "store",
-   "desc": "DNT lodge + camping + café (seasonal). Water/food.",
-   "km": 880.1,
-   "cumGain": 14179
-  },
-  {
-   "lat": 61.8743,
-   "lon": 9.1632,
-   "name": "Vågåmo",
-   "type": "resupply",
-   "desc": "Town, 366m: Coop Extra/Joker/Spar, fuel, sport shop.",
-   "km": 930.0,
-   "cumGain": 14704
-  },
-  {
-   "lat": 61.8459,
-   "lon": 9.3334,
-   "name": "Otta / Sel",
-   "type": "resupply",
-   "desc": "Regional hub: Coop/Rema/Kiwi; ✅ Circle K E6 OPEN 24h (manned, hot food/coffee); Intersport bike, train. Only on-route 24h station.",
-   "km": 940.0,
-   "cumGain": 14950
-  },
-  {
-   "lat": 62.0267,
-   "lon": 9.4152,
-   "name": "Dovre / Grimsdalen — 1170m",
-   "type": "warning",
-   "desc": "High Dovrefjell road, exposed, remote, late & tired. Cold. Full kit.",
-   "km": 988.8,
-   "cumGain": 16507
-  },
-  {
-   "lat": 62.0782,
-   "lon": 10.0672,
-   "name": "Folldal — village 6.5 km N",
-   "type": "resupply",
-   "desc": "Route crosses Folldal MUNICIPALITY (Grimsdalen/Dovrefjell high country) but the VILLAGE is ~6.5 km N off-route. The Dovre→Alvdal leg is an 89 km gap with NO on-route shop — carry food, or detour ~6.5 km N to Folldal village (Coop). First services after: Circle K Alvdal 24/7 (km 1066).",
-   "km": 1030.0,
-   "cumGain": 16604
-  },
-  {
-   "lat": 62.2145,
-   "lon": 10.5745,
-   "name": "Alvdal",
-   "type": "resupply",
-   "desc": "Village: Coop Extra/Prix, Kiwi, fuel. Last resupply before finish.",
-   "km": 1080.1,
-   "cumGain": 17423
-  }
- ],
- "//wpts_base": "the 29 curated schedule waypoints (lat/lon + hand-written desc). Pipeline re-snaps km, flags any now off-route; add new-town wpts by hand after swap."
+  "wpts_base": [
+    {
+      "lat": 62.4094,
+      "lon": 10.9977,
+      "name": "Tolga — START/FINISH",
+      "type": "start",
+      "desc": "Small village. Coop/Joker. Start & finish.",
+      "km": 0.0,
+      "cumGain": 0
+    },
+    {
+      "lat": 62.3668,
+      "lon": 10.6549,
+      "name": "Tynset",
+      "type": "resupply",
+      "desc": "Regional town: Rema/Coop/Kiwi; Circle K 06:30–22:00 (NOT 24h); Intersport bike service; pharmacy, hospital. Best early resupply.",
+      "km": 30.1,
+      "cumGain": 398
+    },
+    {
+      "lat": 62.5325,
+      "lon": 10.3688,
+      "name": "Kvikne",
+      "type": "store",
+      "desc": "Tiny: Joker + fuel pump. Long gap after.",
+      "km": 70.0,
+      "cumGain": 802
+    },
+    {
+      "lat": 62.6483,
+      "lon": 10.0418,
+      "name": "Berkåk / Rennebu",
+      "type": "store",
+      "desc": "On E6: Coop, Circle K/Shell 24h, hot food.",
+      "km": 100.1,
+      "cumGain": 1440
+    },
+    {
+      "lat": 62.6182,
+      "lon": 9.749,
+      "name": "Oppdal",
+      "type": "resupply",
+      "desc": "Town: Coop Extra/Mega, Rema, Kiwi; Circle K 06:00–22:00 (+24h Uno-X/automat, fuel only); sport shops w/ bike service. Last big town before Sunndalen.",
+      "km": 130.0,
+      "cumGain": 1814
+    },
+    {
+      "lat": 62.549,
+      "lon": 9.1096,
+      "name": "Gjøra",
+      "type": "store",
+      "desc": "Small Joker shop. Start of fjord descent.",
+      "km": 170.0,
+      "cumGain": 2125
+    },
+    {
+      "lat": 62.6346,
+      "lon": 8.5339,
+      "name": "Sunndalsøra",
+      "type": "resupply",
+      "desc": "Sea-level fjord town: Coop/Rema/Kiwi/Bunnpris; Circle K 07:00–23:00 (+Uno-X automat 24h); sport shop. Warm. Possible early bivy.",
+      "km": 210.1,
+      "cumGain": 2328
+    },
+    {
+      "lat": 62.45226,
+      "lon": 8.6007,
+      "name": "Aursjøvegen — 920m",
+      "type": "warning",
+      "desc": "The Sunndal wall: +899 m gravel climb out of Sunndalsøra, and the start of the 115 km Aursjøvegen/Eikesdal gap. Exposed, remote, no services — carry food and layers.",
+      "km": 236.5,
+      "cumGain": 3227
+    },
+    {
+      "lat": 62.6496,
+      "lon": 8.1153,
+      "name": "Eresfjord",
+      "type": "store",
+      "desc": "Joker + fuel. Remote.",
+      "km": 300.1,
+      "cumGain": 4171
+    },
+    {
+      "lat": 62.5587,
+      "lon": 7.6829,
+      "name": "Åndalsnes",
+      "type": "resupply",
+      "desc": "Sea-level town: Coop/Rema/Kiwi; Circle K/Esso to 24:00 (midnight); sport shops (outdoor hub), train. ~1/3 mark.",
+      "km": 379.9,
+      "cumGain": 4911
+    },
+    {
+      "lat": 62.43244,
+      "lon": 7.65737,
+      "name": "Trollstigen — 860m",
+      "type": "warning",
+      "desc": "Iconic 11-hairpin climb out of Åndalsnes, +822 m. Tourist traffic; seasonal café/fuel near the top. Exposed up high.",
+      "km": 401.4,
+      "cumGain": 5733
+    },
+    {
+      "lat": 62.3085,
+      "lon": 6.9988,
+      "name": "Stranda",
+      "type": "resupply",
+      "desc": "Town: Coop Extra/Rema/Kiwi, 24h fuel, sport shop, ferry.",
+      "km": 450.0,
+      "cumGain": 6369
+    },
+    {
+      "lat": 61.9997,
+      "lon": 7.0407,
+      "name": "Hellesylt area",
+      "type": "store",
+      "desc": "Village: Spar/Joker, fuel, ferry.",
+      "km": 500.0,
+      "cumGain": 7727
+    },
+    {
+      "lat": 61.9519,
+      "lon": 6.99,
+      "name": "Strynedalen — Stryn 9 km W",
+      "type": "resupply",
+      "desc": "Route follows Strynedalen valley (hamlets Storesunde/Meland/Fosnes); does NOT enter Stryn town — a ~9 km detour W. Stryn town has the last full supermarkets (Coop/Rema/Kiwi/Bunnpris), fuel + bike service before the high passes — worth the detour to stock up for Strynefjellet→Sognefjellet (~130 km, sparse). On-route: Joker Hjelledalen (km 537, Mo-Sa 06:00-24:00) is the real last resupply before Strynefjellet — so the Stryn detour is only needed on Sundays.",
+      "km": 510.1,
+      "cumGain": 7844
+    },
+    {
+      "lat": 61.9865,
+      "lon": 7.4905,
+      "name": "Grotli Pass — 1137m",
+      "type": "warning",
+      "desc": "High exposed pass. Grotli hotel/fuel (seasonal). Cold/windy. Full kit, not a bivy spot.",
+      "km": 561.7,
+      "cumGain": 9056
+    },
+    {
+      "lat": 61.8852,
+      "lon": 8.2642,
+      "name": "Bismo / Skjåk",
+      "type": "store",
+      "desc": "Coop Marked/Joker, fuel. Small.",
+      "km": 620.1,
+      "cumGain": 9293
+    },
+    {
+      "lat": 61.8285,
+      "lon": 8.5371,
+      "name": "Lom",
+      "type": "resupply",
+      "desc": "Outdoor hub, 392m: Coop, Joker, famous bakery; Circle K 07:00–22:00 (Sun 09:00); bike service. LAST town before Sognefjellet.",
+      "km": 640.0,
+      "cumGain": 9416
+    },
+    {
+      "lat": 61.5661,
+      "lon": 8.0079,
+      "name": "Sognefjellet — 1421m",
+      "type": "warning",
+      "desc": "ROUTE HIGH POINT, Europe's highest pass road. Snow walls in July, near-freezing, ~40km no services. Cross rested & fully dressed. DO NOT bivy.",
+      "km": 691.6,
+      "cumGain": 10474
+    },
+    {
+      "lat": 61.3112,
+      "lon": 7.787,
+      "name": "Øvre Årdal",
+      "type": "resupply",
+      "desc": "Sea-level fjord town (12m), warmest & most sheltered mid-race spot. Coop/Rema/Spar, 24h fuel, sport shop. After Sognefjellet, before Valdresflye. RECOMMENDED bivy.",
+      "km": 740.0,
+      "cumGain": 11162
+    },
+    {
+      "lat": 61.2652,
+      "lon": 8.0103,
+      "name": "Tyin / Filefjell — 1076m",
+      "type": "warning",
+      "desc": "Major +1056m climb straight off sea-level Øvre Årdal. Exposed high section, cold/windy, no services. Full kit, not a bivy spot.",
+      "km": 764.0,
+      "cumGain": 12218
+    },
+    {
+      "lat": 61.1681,
+      "lon": 8.4475,
+      "name": "Vang i Valdres",
+      "type": "store",
+      "desc": "Coop/Joker/Spar, fuel, 470m.",
+      "km": 800.1,
+      "cumGain": 12369
+    },
+    {
+      "lat": 61.2485,
+      "lon": 8.9058,
+      "name": "Beitostølen",
+      "type": "resupply",
+      "desc": "Resort, 893m: Coop/Spar, fuel, bike rental+service. Last services before Valdresflye.",
+      "km": 840.0,
+      "cumGain": 13542
+    },
+    {
+      "lat": 61.3887,
+      "lon": 8.8106,
+      "name": "Valdresflye — 1390m",
+      "type": "warning",
+      "desc": "Exposed high plateau, 2nd highest point. Cold/windy, no services. Full kit. DO NOT bivy.",
+      "km": 859.7,
+      "cumGain": 14150
+    },
+    {
+      "lat": 61.5457,
+      "lon": 8.9075,
+      "name": "Gjendesheim / Maurvangen",
+      "type": "store",
+      "desc": "DNT lodge + camping + café (seasonal). Water/food.",
+      "km": 880.1,
+      "cumGain": 14179
+    },
+    {
+      "lat": 61.8743,
+      "lon": 9.1632,
+      "name": "Vågåmo",
+      "type": "resupply",
+      "desc": "Town, 366m: Coop Extra/Joker/Spar, fuel, sport shop.",
+      "km": 930.0,
+      "cumGain": 14704
+    },
+    {
+      "lat": 61.8459,
+      "lon": 9.3334,
+      "name": "Otta / Sel",
+      "type": "resupply",
+      "desc": "Regional hub: Coop/Rema/Kiwi; ✅ Circle K E6 OPEN 24h (manned, hot food/coffee); Intersport bike, train. Only on-route 24h station.",
+      "km": 940.0,
+      "cumGain": 14950
+    },
+    {
+      "lat": 62.0267,
+      "lon": 9.4152,
+      "name": "Dovre / Grimsdalen — 1170m",
+      "type": "warning",
+      "desc": "High Dovrefjell road, exposed, remote, late & tired. Cold. Full kit.",
+      "km": 988.8,
+      "cumGain": 16507
+    },
+    {
+      "lat": 62.0782,
+      "lon": 10.0672,
+      "name": "Folldal — village 6.5 km N",
+      "type": "resupply",
+      "desc": "Route crosses Folldal MUNICIPALITY (Grimsdalen/Dovrefjell high country) but the VILLAGE is ~6.5 km N off-route. The Dovre→Alvdal leg is an 89 km gap with NO on-route shop — carry food, or detour ~6.5 km N to Folldal village (Coop). First services after: Circle K Alvdal 24/7 (km 1066).",
+      "km": 1030.0,
+      "cumGain": 16604
+    },
+    {
+      "lat": 62.2145,
+      "lon": 10.5745,
+      "name": "Alvdal",
+      "type": "resupply",
+      "desc": "Village: Coop Extra/Prix, Kiwi, fuel. Last resupply before finish.",
+      "km": 1080.1,
+      "cumGain": 17423
+    }
+  ],
+  "//wpts_base": "the 29 curated schedule waypoints (lat/lon + hand-written desc). Pipeline re-snaps km, flags any now off-route; add new-town wpts by hand after swap."
 }
