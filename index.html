@@ -128,7 +128,7 @@ tr.nextstop td{background:#13243a !important;box-shadow:inset 3px 0 0 var(--blue
     overscroll-behavior:contain;padding:0 14px 64px}
   /* dashboard panels shrink so the map/profile don't swallow the scroll */
   html.js #map{height:46dvh}
-  html.js #profcard{height:38dvh}
+  html.js #profcard{height:38dvh;padding:14px 6px}
   /* sticky tabs ride at the top of the scroll region */
   html.js .tabbar{top:0;margin:16px 0 0}
   /* the active pane fills the screen below the tab bar */
@@ -836,7 +836,7 @@ const elevChart=new Chart(ctx,{type:'line',
  options:{responsive:true,maintainAspectRatio:false,animation:false,
   scales:{x:{type:'linear',min:0,max:DATA.totalKm,title:{display:true,text:'Distance (km)',color:'#90a0b5'},
     ticks:{color:'#90a0b5',stepSize:100},grid:{color:'#22303f'}},
-   y:{title:{display:true,text:'Elevation (m)',color:'#90a0b5'},ticks:{color:'#90a0b5'},grid:{color:'#22303f'}}},
+   y:{title:{display:!window.matchMedia('(max-width:760px)').matches,text:'Elevation (m)',color:'#90a0b5'},ticks:{color:'#90a0b5'},grid:{color:'#22303f'}}},
   plugins:{legend:{display:false},
    tooltip:{callbacks:{title:i=>i[0].raw.n?i[0].raw.n:`${i[0].parsed.x.toFixed(0)} km`,
      label:i=>{if(i.raw&&i.raw.tun){const l=[`🚇 ${i.raw.lenstr} · ${i.raw.road}`];if(i.raw.lit===0)l.push('unlit');return l;}const g=i.raw&&i.raw.g; return g!=null?[`${Math.round(i.parsed.y)} m elevation`,`↑ ${g.toLocaleString()} m total climb`]:`${Math.round(i.parsed.y)} m`;}}}}}
