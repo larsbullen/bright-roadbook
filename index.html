@@ -218,8 +218,8 @@ tr.nextstop td{background:#13243a !important;box-shadow:inset 3px 0 0 var(--blue
 
 <div class="tabbar" role="tablist">
  <button class="tab active" data-pane="schedule" onclick="showTab('schedule')">📋 Schedule</button>
- <button class="tab" data-pane="climbs" onclick="showTab('climbs')">⛰️ Climbs</button>
  <button class="tab" data-pane="supplies" onclick="showTab('supplies')">🛒 Supplies</button>
+ <button class="tab" data-pane="climbs" onclick="showTab('climbs')">⛰️ Climbs</button>
  <button class="tab" data-pane="tunnels" onclick="showTab('tunnels')">🚇 Tunnels</button>
  <button class="tab" data-pane="ferry" onclick="showTab('ferry')">⛴️ Ferry</button>
  <button class="tab" data-pane="hytter" onclick="showTab('hytter')">🛖 Hytter</button>
@@ -967,7 +967,7 @@ renderShopList('all'); // shop/fuel/food list always shown
 renderHytteList('all'); // DNT huts list
 
 // ---------- TABS ----------
-const TAB_NAMES=['schedule','climbs','supplies','tunnels','ferry','hytter'];
+const TAB_NAMES=['schedule','supplies','climbs','tunnels','ferry','hytter'];
 function showTab(name){
   document.querySelectorAll('.tabpane').forEach(p=>p.classList.toggle('active',p.dataset.pane===name));
   document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',b.dataset.pane===name));
