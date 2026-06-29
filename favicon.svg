@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <clipPath id="r"><rect x="0" y="0" width="64" height="64" rx="14"/></clipPath>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#16243a"/>
+      <stop offset="1" stop-color="#0f1419"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="58%" r="42%">
+      <stop offset="0" stop-color="#ffd27a"/>
+      <stop offset="0.5" stop-color="#ffb454"/>
+      <stop offset="1" stop-color="#ffb454" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <g clip-path="url(#r)">
+    <rect x="0" y="0" width="64" height="64" fill="url(#sky)"/>
+    <!-- midnight sun glow + disc, sitting low on the horizon -->
+    <circle cx="32" cy="38" r="26" fill="url(#glow)"/>
+    <circle cx="32" cy="38" r="11" fill="#ffd27a"/>
+    <!-- back ridge -->
+    <path d="M0 44 L13 33 L24 41 L34 30 L46 40 L56 31 L64 39 L64 64 L0 64 Z" fill="#2c3a4e"/>
+    <!-- front ridge -->
+    <path d="M0 64 L0 50 L10 42 L20 49 L31 39 L43 49 L54 42 L64 49 L64 64 Z" fill="#1a2230"/>
+    <!-- snow caps on front peaks -->
+    <path d="M31 39 L27 43 L35 43 Z" fill="#e8eef5"/>
+    <path d="M10 42 L6 46 L14 46 Z" fill="#e8eef5"/>
+    <path d="M54 42 L50 46 L58 46 Z" fill="#e8eef5"/>
+  </g>
+  <rect x="0.5" y="0.5" width="63" height="63" rx="13.5" fill="none" stroke="#3b9df0" stroke-opacity="0.35"/>
+</svg>
