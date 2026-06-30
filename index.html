@@ -180,6 +180,13 @@ tr.nextstop td{background:#13243a !important;box-shadow:inset 3px 0 0 var(--blue
   </div>
   <div class="ctl"><label>km done</label><input type="number" id="raceKm" min="0" max="1132" step="1" value="0" style="width:104px;font-size:21px;font-weight:800"></div>
  </div>
+ <div class="ctl" style="margin-top:16px">
+  <label>🚦 Actual start time <span class="opt" style="text-transform:none;letter-spacing:0">— only change this if the start is delayed; everything recalculates from it</span></label>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+   <input type="datetime-local" id="raceStart" value="2026-07-05T09:00" style="font-size:15px">
+   <button type="button" class="preset" id="raceStartReset">↺ Official 09:00</button>
+  </div>
+ </div>
  <label style="display:inline-flex;align-items:center;gap:8px;margin-top:14px;font-size:13px;color:var(--mut);cursor:pointer">
   <input type="checkbox" id="devSim" style="width:16px;height:16px;accent-color:#ff2d55"> 🧪 Dev: simulate elapsed time (preview before race day)
  </label>
@@ -191,7 +198,7 @@ tr.nextstop td{background:#13243a !important;box-shadow:inset 3px 0 0 var(--blue
  <div id="raceStatus" class="racestatus"></div>
 </div>
 <div id="raceAhead"></div>
-<p class="note">Uses your device clock · race starts Sun 5 Jul 2026 09:00 · projection is terrain-weighted from your actual pace so far (includes your stops). Re-enter your km whenever you check in.</p>
+<p class="note">Uses your device clock · official start Sun 5 Jul 2026 09:00 (override above if it's delayed) · projection is terrain-weighted from your actual pace so far (includes your stops). Re-enter your km whenever you check in.</p>
 </div>
 
 <h2>🗺️ Route map</h2>
@@ -957,7 +964,19 @@ function preset(t,s){document.getElementById('target').value=t;document.getEleme
 document.getElementById('targetSlider').addEventListener('input',function(){
   document.getElementById('target').value=this.value;recompute();});
 document.getElementById('target').addEventListener('input',function(){syncSlider();recompute();});
-document.getElementById('start').addEventListener('input',recompute);
+function onStartChange(v){
+  if(v){ document.getElementById('start').value=v;
+    var rsd=document.getElementById('raceStart'); if(rsd)rsd.value=v;
+    try{localStorage.setItem('bm_start',v);}catch(e){} }
+  recompute(); if(MODE==='race')raceUpdate();
+}
+document.getElementById('start').addEventListener('input',function(){onStartChange(this.value);});
+(function(){
+  var rsd=document.getElementById('raceStart'); if(!rsd)return;
+  rsd.addEventListener('input',function(){onStartChange(this.value);});
+  var rsr=document.getElementById('raceStartReset');
+  if(rsr)rsr.addEventListener('click',function(){onStartChange('2026-07-05T09:00');});
+})();
 document.getElementById('sleep').addEventListener('input',recompute);
 recompute();
 renderShopList('all'); // shop/fuel/food list always shown
@@ -1115,6 +1134,8 @@ function setMode(m){
   dv.addEventListener('change',()=>{ $('devRow').style.display=dv.checked?'block':'none'; try{localStorage.setItem('bm_dev24',dv.checked?'1':'0');}catch(e){} if(MODE==='race')raceUpdate(); });
   dh.addEventListener('input',()=>{ try{localStorage.setItem('bm_devH',dh.value);}catch(e){} if(MODE==='race')raceUpdate(); });
   tagStatic();
+  try{var ss=localStorage.getItem('bm_start'); if(ss)$('start').value=ss;}catch(e){}
+  if($('raceStart'))$('raceStart').value=$('start').value;
   let mode='plan'; try{mode=localStorage.getItem('bm_mode')||'plan';}catch(e){}
   setMode(mode);
   setInterval(()=>{ if(MODE==='race')raceUpdate(); },30000); // keep elapsed/projection live
